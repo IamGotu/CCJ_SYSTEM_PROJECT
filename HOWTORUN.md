@@ -28,10 +28,12 @@ HOW TO RUN THE PROJECT (CCJ_SYSTEM_PROJECT)
 
 14. Inside folder CCJ_SYSTEM_PROJECT find the file ".env.example" and change it to ".env"
 
-15. In the terminal located in folder CCJ_SYSTEM_PROJECT type "php artisan migrate" to migrate the database
+15. Open the terminal located in folder CCJ_SYSTEM_PROJECT and type "install composer"
 
-16. In the terminal located in folder CCJ_SYSTEM_PROJECT type "npm run dev"
+16. Open the terminal located in folder CCJ_SYSTEM_PROJECT and type "php artisan migrate" to migrate the database
 
-17. In the terminal located in folder CCJ_SYSTEM_PROJECT type "php artisan serve"
+17. Open the terminal located in folder CCJ_SYSTEM_PROJECT and type "npm run dev"
 
-18. Open the running server or Ctrl+click the following link
+18. Open the terminal located in folder CCJ_SYSTEM_PROJECT and type "php artisan serve"
+
+19. Open the running server or Ctrl+click the following link

@@ -5,47 +5,141 @@
         </h2>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="py-5">
+        <div class="max-w mx-auto sm:px-6 lg:px-5">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <form method="POST" action="{{ route('students.update', $student->id) }}">
                         @csrf
                         @method('PUT')
 
-                        @foreach ([
-                            'student_id_number' => 'Student ID Number',
-                            'first_name' => 'First Name',
-                            'middle_name' => 'Middle Name',
-                            'last_name' => 'Last Name',
-                            'suffix' => 'Suffix',
-                            'birthdate' => 'Birthdate',
-                            'purok' => 'Purok',
-                            'street_num' => 'Street Number',
-                            'street_name' => 'Street Name',
-                            'barangay' => 'Barangay',
-                            'city' => 'City',
-                            'state' => 'State',
-                            'postal_num' => 'Postal Number',
-                            'contact_number' => 'Contact Number',
-                            'father_name' => 'Father Name',
-                            'mother_name' => 'Mother Name',
-                            'guardian_name' => 'Guardian Name',
-                            'father_contact' => 'Father Contact',
-                            'mother_contact' => 'Mother Contact',
-                            'guardian_contact' => 'Guardian Contact',
-                        ] as $name => $label)
-                            <div class="mb-4">
-                                <label for="{{ $name }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ $label }}</label>
-                                <input type="{{ in_array($name, ['birthdate', 'graduation_date']) ? 'date' : 'text' }}"
-                                       name="{{ $name }}"
-                                       class="mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-400 dark:bg-gray-700 dark:text-gray-200"
-                                       id="{{ $name }}"
-                                       value="{{ old($name, $name == 'birthdate' && $student->birthdate ? $student->birthdate->format('Y-m-d') : $student->$name) }}"
-                                       @if(in_array($name, ['student_id_number', 'first_name', 'last_name', 'birthdate'])) required @endif>
-                            </div>
-                        @endforeach
+                        <!-- Student ID Number -->
+                        <div class="mb-4">
+                            <label for="student_id_number" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Student ID Number</label>
+                            <input type="text" name="student_id_number" id="student_id_number" required
+                                   value="{{ old('student_id_number', $student->student_id_number) }}"
+                                   class="mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-400 dark:bg-gray-700 dark:text-gray-200">
+                        </div>
 
+                        <!-- Name Fields -->
+                        <div class="mb-4">
+                            <label for="first_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">First Name</label>
+                            <input type="text" name="first_name" id="first_name" required
+                                   value="{{ old('first_name', $student->first_name) }}"
+                                   class="mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-400 dark:bg-gray-700 dark:text-gray-200">
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="middle_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Middle Name</label>
+                            <input type="text" name="middle_name" id="middle_name"
+                                   value="{{ old('middle_name', $student->middle_name) }}"
+                                   class="mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-400 dark:bg-gray-700 dark:text-gray-200">
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="last_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Last Name</label>
+                            <input type="text" name="last_name" id="last_name" required
+                                   value="{{ old('last_name', $student->last_name) }}"
+                                   class="mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-400 dark:bg-gray-700 dark:text-gray-200">
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="suffix" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Suffix</label>
+                            <input type="text" name="suffix" id="suffix"
+                                   value="{{ old('suffix', $student->suffix) }}"
+                                   class="mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-400 dark:bg-gray-700 dark:text-gray-200">
+                        </div>
+
+                        <!-- Birthdate -->
+                        <div class="mb-4">
+                            <label for="birthdate" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Birthdate</label>
+                            <input type="date" name="birthdate" id="birthdate" required
+                                   value="{{ old('birthdate', $student->birthdate ? $student->birthdate->format('Y-m-d') : '') }}"
+                                   class="mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-400 dark:bg-gray-700 dark:text-gray-200">
+                        </div>
+
+                        <!-- Address Fields -->
+                        <div class="mb-4">
+                            <label for="street_num" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Street Number</label>
+                            <input type="text" name="street_num" id="street_num"
+                                   value="{{ old('street_num', $student->street_num) }}"
+                                   class="mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-400 dark:bg-gray-700 dark:text-gray-200">
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="street_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Street Name</label>
+                            <input type="text" name="street_name" id="street_name"
+                                   value="{{ old('street_name', $student->street_name) }}"
+                                   class="mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-400 dark:bg-gray-700 dark:text-gray-200">
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="barangay" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Barangay</label>
+                            <input type="text" name="barangay" id="barangay"
+                                   value="{{ old('barangay', $student->barangay) }}"
+                                   class="mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-400 dark:bg-gray-700 dark:text-gray-200">
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="city" class="block text-sm font-medium text-gray-700 dark:text-gray-300">City</label>
+                            <input type="text" name="city" id="city"
+                                   value="{{ old('city', $student->city) }}"
+                                   class="mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-400 dark:bg-gray-700 dark:text-gray-200">
+                        </div>
+
+                        <!-- Contact Number -->
+                        <div class="mb-4">
+                            <label for="contact_number" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Contact Number</label>
+                            <input type="text" name="contact_number" id="contact_number"
+                                   value="{{ old('contact_number', $student->contact_number) }}"
+                                   class="mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-400 dark:bg-gray-700 dark:text-gray-200">
+                        </div>
+
+                        <!-- Guardian Details -->
+                        <div class="mb-4">
+                            <label for="father_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Father Name</label>
+                            <input type="text" name="father_name" id="father_name"
+                                   value="{{ old('father_name', $student->father_name) }}"
+                                   class="mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-400 dark:bg-gray-700 dark:text-gray-200">
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="mother_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Mother Name</label>
+                            <input type="text" name="mother_name" id="mother_name"
+                                   value="{{ old('mother_name', $student->mother_name) }}"
+                                   class="mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-400 dark:bg-gray-700 dark:text-gray-200">
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="guardian_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Guardian Name</label>
+                            <input type="text" name="guardian_name" id="guardian_name"
+                                   value="{{ old('guardian_name', $student->guardian_name) }}"
+                                   class="mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-400 dark:bg-gray-700 dark:text-gray-200">
+                        </div>
+
+                        <!-- Guardian Contact Details -->
+                        <div class="mb-4">
+                            <label for="father_contact" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Father Contact</label>
+                            <input type="text" name="father_contact" id="father_contact"
+                                   value="{{ old('father_contact', $student->father_contact) }}"
+                                   class="mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-400 dark:bg-gray-700 dark:text-gray-200">
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="mother_contact" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Mother Contact</label>
+                            <input type="text" name="mother_contact" id="mother_contact"
+                                   value="{{ old('mother_contact', $student->mother_contact) }}"
+                                   class="mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-400 dark:bg-gray-700 dark:text-gray-200">
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="guardian_contact" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Guardian Contact</label>
+                            <input type="text" name="guardian_contact" id="guardian_contact"
+                                   value="{{ old('guardian_contact', $student->guardian_contact) }}"
+                                   class="mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-400 dark:bg-gray-700 dark:text-gray-200">
+                        </div>
+
+                        <!-- Graduation Details -->
                         <div class="mb-4">
                             <label for="graduated" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Graduated</label>
                             <select name="graduated" required
@@ -57,7 +151,8 @@
 
                         <div class="mb-4">
                             <label for="graduation_date" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Graduation Date</label>
-                            <input type="date" name="graduation_date" value="{{ old('graduation_date', $student->graduation_date ? $student->graduation_date->format('Y-m-d') : '') }}"
+                            <input type="date" name="graduation_date"
+                                   value="{{ old('graduation_date', $student->graduation_date ? $student->graduation_date->format('Y-m-d') : '') }}"
                                    class="mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-400 dark:bg-gray-700 dark:text-gray-200">
                         </div>
 

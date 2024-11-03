@@ -58,6 +58,14 @@
                                    class="mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-400 dark:bg-gray-700 dark:text-gray-200">
                         </div>
 
+                        <!-- Purok -->
+                        <div class="mb-4">
+                            <label for="purok" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Purok</label>
+                            <input type="text" name="purok" id="purok"
+                                   value="{{ old('purok', $student->purok) }}"
+                                   class="mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-400 dark:bg-gray-700 dark:text-gray-200">
+                        </div>
+
                         <!-- Address Fields -->
                         <div class="mb-4">
                             <label for="street_num" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Street Number</label>
@@ -84,6 +92,20 @@
                             <label for="city" class="block text-sm font-medium text-gray-700 dark:text-gray-300">City</label>
                             <input type="text" name="city" id="city"
                                    value="{{ old('city', $student->city) }}"
+                                   class="mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-400 dark:bg-gray-700 dark:text-gray-200">
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="state" class="block text-sm font-medium text-gray-700 dark:text-gray-300">State</label>
+                            <input type="text" name="state" id="state"
+                                   value="{{ old('state', $student->state) }}"
+                                   class="mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-400 dark:bg-gray-700 dark:text-gray-200">
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="postal_num" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Postal Number</label>
+                            <input type="text" name="postal_num" id="postal_num"
+                                   value="{{ old('postal_num', $student->postal_num) }}"
                                    class="mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-400 dark:bg-gray-700 dark:text-gray-200">
                         </div>
 
@@ -117,7 +139,6 @@
                                    class="mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-400 dark:bg-gray-700 dark:text-gray-200">
                         </div>
 
-                        <!-- Guardian Contact Details -->
                         <div class="mb-4">
                             <label for="father_contact" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Father Contact</label>
                             <input type="text" name="father_contact" id="father_contact"
@@ -139,16 +160,21 @@
                                    class="mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-400 dark:bg-gray-700 dark:text-gray-200">
                         </div>
 
-                        <!-- Graduation Details -->
+                        <!-- Year Level -->
                         <div class="mb-4">
-                            <label for="graduated" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Graduated</label>
-                            <select name="graduated" required
+                            <label for="year_level" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Year Level</label>
+                            <select name="year_level" required
                                     class="mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-400 dark:bg-gray-700 dark:text-gray-200">
-                                <option value="1" {{ $student->graduated ? 'selected' : '' }}>Yes</option>
-                                <option value="0" {{ !$student->graduated ? 'selected' : '' }}>No</option>
+                                <option value="" disabled>Select Year Level</option>
+                                <option value="1ST" {{ old('year_level', $student->year_level) === '1ST' ? 'selected' : '' }}>1ST</option>
+                                <option value="2ND" {{ old('year_level', $student->year_level) === '2ND' ? 'selected' : '' }}>2ND</option>
+                                <option value="3RD" {{ old('year_level', $student->year_level) === '3RD' ? 'selected' : '' }}>3RD</option>
+                                <option value="4TH" {{ old('year_level', $student->year_level) === '4TH' ? 'selected' : '' }}>4TH</option>
+                                <option value="GRADUATE" {{ old('year_level', $student->year_level) === 'GRADUATE' ? 'selected' : '' }}>GRADUATE</option>
                             </select>
                         </div>
 
+                        <!-- Graduation Date -->
                         <div class="mb-4">
                             <label for="graduation_date" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Graduation Date</label>
                             <input type="date" name="graduation_date"

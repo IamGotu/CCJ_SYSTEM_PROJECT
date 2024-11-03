@@ -36,7 +36,7 @@
                         ] as $name => $label)
                             <div class="mb-4">
                                 <label for="{{ $name }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ $label }}</label>
-                                <input type="{{ in_array($name, ['birthdate', 'graduation_date']) ? 'date' : 'text' }}"
+                                <input type="{{ in_array($name, ['birthdate']) ? 'date' : 'text' }}"
                                        name="{{ $name }}"
                                        class="mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-400 dark:bg-gray-700 dark:text-gray-200"
                                        id="{{ $name }}"
@@ -45,11 +45,15 @@
                         @endforeach
 
                         <div class="mb-4">
-                            <label for="graduated" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Graduated</label>
-                            <select name="graduated" required
+                            <label for="year_level" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Year Level</label>
+                            <select name="year_level" required
                                     class="mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-400 dark:bg-gray-700 dark:text-gray-200">
-                                <option value="1">Yes</option>
-                                <option value="0">No</option>
+                                <option value="" disabled selected>Select Year Level</option>
+                                <option value="1ST">1ST</option>
+                                <option value="2ND">2ND</option>
+                                <option value="3RD">3RD</option>
+                                <option value="4TH">4TH</option>
+                                <option value="GRADUATE">GRADUATE</option>
                             </select>
                         </div>
 

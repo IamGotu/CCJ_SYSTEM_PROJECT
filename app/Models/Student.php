@@ -30,13 +30,12 @@ class Student extends Model
         'father_contact',
         'mother_contact',
         'guardian_contact',
-        'graduated',
+        'year_level',
         'graduation_date',
     ];
 
     protected $casts = [
         'birthdate' => 'date',  // Cast birthdate to Carbon
         'graduation_date' => 'date',  // Cast graduation_date to Carbon
-        'graduated' => 'boolean',  // Cast graduated to boolean
     ];
 }

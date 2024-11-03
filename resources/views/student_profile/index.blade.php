@@ -22,7 +22,7 @@
                                     <th class="py-2 px-4 text-center">Contact Number</th>
                                     <th class="py-2 px-4 text-center">Guardian</th>
                                     <th class="py-2 px-4 text-center">Guardian Contact</th>
-                                    <th class="py-2 px-4 text-center">Graduated</th>
+                                    <th class="py-2 px-4 text-center">Year Level</th>
                                     <th class="py-2 px-4 text-center">Graduation Date</th>
                                     <th class="py-2 px-4 text-center">Action</th>
                                 </tr>
@@ -46,7 +46,8 @@
                                             {{ implode(' and ', array_filter([$student->father_contact, $student->mother_contact])) ?: $student->guardian_contact }}
                                         </td>
 
-                                        <td class="py-2 px-4 text-center">{{ $student->graduated ? 'Yes' : 'No' }}</td>
+                                        <!-- Year Level -->
+                                        <td class="py-2 px-4 text-center">{{ $student->year_level }}</td>
                                         <td class="py-2 px-4 text-center">{{ $student->graduation_date ? $student->graduation_date->format('Y-m-d') : 'N/A' }}</td>
                                         <td class="py-2 px-4 text-center">
                                             <a href="{{ route('students.edit', $student) }}" class="text-blue-500 hover:text-blue-700">Edit</a>

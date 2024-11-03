@@ -12,78 +12,56 @@
                     <form method="POST" action="{{ route('students.update', $student->id) }}">
                         @csrf
                         @method('PUT')
-                        <div>
-                            <label for="student_id_number">Student ID Number</label>
-                            <input type="text" name="student_id_number" value="{{ $student->student_id_number }}" required>
-                        </div>
-                        <div>
-                            <label for="first_name">First Name</label>
-                            <input type="text" name="first_name" value="{{ $student->first_name }}" required>
-                        </div>
-                        <div>
-                            <label for="middle_name">Middle Name</label>
-                            <input type="text" name="middle_name" value="{{ $student->middle_name }}">
-                        </div>
-                        <div>
-                            <label for="last_name">Last Name</label>
-                            <input type="text" name="last_name" value="{{ $student->last_name }}" required>
-                        </div>
-                        <div>
-                            <label for="suffix">Suffix</label>
-                            <input type="text" name="suffix" value="{{ $student->suffix }}">
-                        </div>
-                        <div>
-                            <label for="birthdate">Birthdate</label>
-                            <input type="date" name="birthdate" value="{{ $student->birthdate }}" required>
-                        </div>
-                        <div>
-                            <label for="purok">Purok</label>
-                            <input type="text" name="purok" value="{{ $student->purok }}">
-                        </div>
-                        <div>
-                            <label for="street_num">Street Number</label>
-                            <input type="text" name="street_num" value="{{ $student->street_num }}">
-                        </div>
-                        <div>
-                            <label for="street_name">Street Name</label>
-                            <input type="text" name="street_name" value="{{ $student->street_name }}">
-                        </div>
-                        <div>
-                            <label for="barangay">Barangay</label>
-                            <input type="text" name="barangay" value="{{ $student->barangay }}">
-                        </div>
-                        <div>
-                            <label for="city">City</label>
-                            <input type="text" name="city" value="{{ $student->city }}">
-                        </div>
-                        <div>
-                            <label for="state">State</label>
-                            <input type="text" name="state" value="{{ $student->state }}">
-                        </div>
-                        <div>
-                            <label for="postal_num">Postal Number</label>
-                            <input type="text" name="postal_num" value="{{ $student->postal_num }}">
-                        </div>
-                        <div>
-                            <label for="contact_number">Contact Number</label>
-                            <input type="text" name="contact_number" value="{{ $student->contact_number }}">
-                        </div>
-                        <div>
-                            <label for="guardian_name">Guardian Name</label>
-                            <input type="text" name="guardian_name" value="{{ $student->guardian_name }}">
-                        </div>
-                        <div>
-                            <label for="graduated">Graduated</label>
-                            <select name="graduated" required>
+
+                        @foreach ([
+                            'student_id_number' => 'Student ID Number',
+                            'first_name' => 'First Name',
+                            'middle_name' => 'Middle Name',
+                            'last_name' => 'Last Name',
+                            'suffix' => 'Suffix',
+                            'birthdate' => 'Birthdate',
+                            'purok' => 'Purok',
+                            'street_num' => 'Street Number',
+                            'street_name' => 'Street Name',
+                            'barangay' => 'Barangay',
+                            'city' => 'City',
+                            'state' => 'State',
+                            'postal_num' => 'Postal Number',
+                            'contact_number' => 'Contact Number',
+                            'father_name' => 'Father Name',
+                            'mother_name' => 'Mother Name',
+                            'guardian_name' => 'Guardian Name',
+                            'father_contact' => 'Father Contact',
+                            'mother_contact' => 'Mother Contact',
+                            'guardian_contact' => 'Guardian Contact',
+                        ] as $name => $label)
+                            <div class="mb-4">
+                                <label for="{{ $name }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ $label }}</label>
+                                <input type="{{ in_array($name, ['birthdate', 'graduation_date']) ? 'date' : 'text' }}"
+                                       name="{{ $name }}"
+                                       class="mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-400 dark:bg-gray-700 dark:text-gray-200"
+                                       id="{{ $name }}"
+                                       value="{{ old($name, $name == 'birthdate' && $student->birthdate ? $student->birthdate->format('Y-m-d') : $student->$name) }}"
+                                       @if(in_array($name, ['student_id_number', 'first_name', 'last_name', 'birthdate'])) required @endif>
+                            </div>
+                        @endforeach
+
+                        <div class="mb-4">
+                            <label for="graduated" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Graduated</label>
+                            <select name="graduated" required
+                                    class="mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-400 dark:bg-gray-700 dark:text-gray-200">
                                 <option value="1" {{ $student->graduated ? 'selected' : '' }}>Yes</option>
                                 <option value="0" {{ !$student->graduated ? 'selected' : '' }}>No</option>
                             </select>
                         </div>
-                        <div>
-                            <label for="graduation_date">Graduation Date</label>
-                            <input type="date" name="graduation_date" value="{{ $student->graduation_date }}">
+
+                        <div class="mb-4">
+                            <label for="graduation_date" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Graduation Date</label>
+                            <input type="date" name="graduation_date" value="{{ old('graduation_date', $student->graduation_date ? $student->graduation_date->format('Y-m-d') : '') }}"
+                                   class="mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-400 dark:bg-gray-700 dark:text-gray-200">
                         </div>
-                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Update Student</button>
+
+                        <button type="submit" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-200">Update Student</button>
                     </form>
                 </div>
             </div>

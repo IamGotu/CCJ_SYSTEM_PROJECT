@@ -36,4 +36,11 @@ HOW TO RUN THE PROJECT (CCJ_SYSTEM_PROJECT)
 
 18. Open the terminal located in folder CCJ_SYSTEM_PROJECT and type "php artisan serve"
 
-19. Open the running server or Ctrl+click the following link
+19. If it says no application encryption key has been specified
+
+20. In the terminal located in folder social_media_app type "php artisan key:generate"
+
+21. Then try again in the terminal located in folder social_media_app the "php artisan serve"
+
+22. Open the running server or Ctrl+click the following link
+

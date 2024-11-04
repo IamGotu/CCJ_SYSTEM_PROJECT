@@ -5,34 +5,48 @@
         </h2>
     </x-slot>
 
-    <div class="py-1">
-        <div class="max-w mx-auto sm:px-6 lg:px-5">
-            <a href="{{ route('students.create') }}" class="mt-4 inline-block bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition duration-200">Add Student</a>
-            
-            <div class="flex items-center mt-4">
-                <!-- Search Form -->
-                <form method="GET" action="{{ route('students.index') }}" class="flex space-x-2">
-                    <input type="text" name="search" placeholder="Search by name or ID" 
-                           class="p-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-gray-200"
-                           value="{{ request('search') }}">
-                    
-                    <!-- Year Level Filter -->
-                    <select name="year_level" class="p-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-gray-200">
-                        <option value="">Filter by Year Level</option>
-                        <option value="1ST" {{ request('year_level') == '1ST' ? 'selected' : '' }}>1ST</option>
-                        <option value="2ND" {{ request('year_level') == '2ND' ? 'selected' : '' }}>2ND</option>
-                        <option value="3RD" {{ request('year_level') == '3RD' ? 'selected' : '' }}>3RD</option>
-                        <option value="4TH" {{ request('year_level') == '4TH' ? 'selected' : '' }}>4TH</option>
-                        <option value="GRADUATE" {{ request('year_level') == 'GRADUATE' ? 'selected' : '' }}>GRADUATE</option>
-                    </select>
-                    
-                    <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-200">Search</button>
-                </form>
+        <div class="py-1">
+            <div class="max-w mx-auto sm:px-6 lg:px-5">
+                <!-- Search and Filter Section -->
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-4 space-y-2 sm:space-y-0">
+                    <!-- Add Student Button -->
+                    <a href="{{ route('students.create') }}" class="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition duration-200">
+                        Add Student
+                    </a>
 
-                <!-- Refresh Button -->
-                <a href="{{ route('students.index') }}" class="ml-2 bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600 transition duration-200">Refresh</a>
+                    <!-- Search Form and Filter Container -->
+                    <div class="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-2 w-full sm:w-auto">
+                        <!-- Search Form -->
+                        <form method="GET" action="{{ route('students.index') }}" class="flex flex-col sm:flex-row sm:space-x-2 w-full sm:w-auto">
+                            <!-- Search Input -->
+                            <input type="text" name="search" placeholder="Search by name or ID"
+                                class="p-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-gray-200 w-full sm:w-60"
+                                value="{{ request('search') }}">
+
+                            <!-- Year Level Filter Dropdown -->
+                            <select name="year_level" class="p-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-gray-200 w-full sm:w-auto">
+                                <option value="">Filter by Year Level</option>
+                                <option value="1ST" {{ request('year_level') == '1ST' ? 'selected' : '' }}>1ST</option>
+                                <option value="2ND" {{ request('year_level') == '2ND' ? 'selected' : '' }}>2ND</option>
+                                <option value="3RD" {{ request('year_level') == '3RD' ? 'selected' : '' }}>3RD</option>
+                                <option value="4TH" {{ request('year_level') == '4TH' ? 'selected' : '' }}>4TH</option>
+                                <option value="GRADUATE" {{ request('year_level') == 'GRADUATE' ? 'selected' : '' }}>GRADUATE</option>
+                            </select>
+
+                            <!-- Search Button -->
+                            <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-200">
+                                Search
+                            </button>
+                        </form>
+
+                        <!-- Refresh Button -->
+                        <a href="{{ route('students.index') }}" class="bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600 transition duration-200 sm:ml-2">
+                            Refresh
+                        </a>
+                    </div>
+                </div>
             </div>
-            
+
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg mt-4">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <!-- Adding overflow-x-auto for horizontal scroll on small screens -->

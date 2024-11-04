@@ -7,12 +7,31 @@ use Illuminate\Http\Request;
 
 class StudentController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $students = Student::all();
+        $query = Student::query();
+    
+        // Search filter
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function($q) use ($search) {
+                $q->where('student_id_number', 'like', "%$search%")
+                  ->orWhere('first_name', 'like', "%$search%")
+                  ->orWhere('middle_name', 'like', "%$search%")
+                  ->orWhere('last_name', 'like', "%$search%");
+            });
+        }
+    
+        // Year Level filter
+        if ($request->filled('year_level')) {
+            $query->where('year_level', $request->input('year_level'));
+        }
+    
+        $students = $query->paginate(10);
+    
         return view('student_profile.index', compact('students'));
     }
-
+    
     public function create()
     {
         return view('student_profile.create');

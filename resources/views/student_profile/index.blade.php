@@ -33,7 +33,7 @@
                                         <td class="py-2 px-4 text-center">{{ $student->student_id_number }}</td>
                                         <td class="py-2 px-4 text-center">{{ $student->first_name }} {{ $student->middle_name }} {{ $student->last_name }} {{ $student->suffix }}</td>
                                         <td class="py-2 px-4 text-center">{{ $student->birthdate->format('Y-m-d') }}</td>
-                                        <td class="py-2 px-4 text-center">{{ $student->purok }}, {{ $student->street_num }} {{ $student->street_name }}, {{ $student->barangay }}, {{ $student->city }}</td>
+                                        <td class="py-2 px-4 text-center">{{ $student->purok }}, {{ $student->street_num }} {{ $student->street_name }}, {{ $student->barangay }}, {{ $student->city }}, {{ $student->state }}</td>
                                         <td class="py-2 px-4 text-center">{{ $student->contact_number ?? 'N/A' }}</td>
 
                                         <!-- Guardian Name Logic -->

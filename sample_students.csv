@@ -1,0 +1,4 @@
+﻿student_id_number,first_name,middle_name,last_name,suffix,birthdate,purok,street_num,street_name,barangay,city,state,contact_number,father_name,mother_name,guardian_name,father_contact,mother_contact,guardian_contact,year_level,graduation_date
+2023001,John,Doe,Smith,,2005-01-01,Purok 1,123,Main St,Barangay 1,City A,State A,09123456789,Father 1,,,09123456701,,,GRADUATE,2023-06-01
+2023002,Jane,Anne,Doe,Jr.,2005-02-02,Purok 2,456,Second St,Barangay 2,City B,State B,09234567890,,,Guardian 1,,,09123456722,2ND,
+2023003,Mark,David,Johnson,II,2005-03-03,Purok 3,789,Third St,Barangay 3,City C,State C,09345678901,,Mother 1,,,09123456713,,3RD,

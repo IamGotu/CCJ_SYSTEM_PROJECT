@@ -14,6 +14,17 @@
                         Add Student
                     </a>
 
+                    <!-- Import Students Form -->
+                    <div class="flex items-center space-x-2">
+                        <form action="{{ route('students.import') }}" method="POST" enctype="multipart/form-data" class="flex items-center">
+                            @csrf
+                            <input type="file" name="file" required class="p-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-gray-200">
+                            <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-200 ml-2">
+                                Import Students
+                            </button>
+                        </form>
+                    </div>
+
                     <!-- Search Form and Filter Container -->
                     <div class="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-2 w-full sm:w-auto">
                         <!-- Search Form -->

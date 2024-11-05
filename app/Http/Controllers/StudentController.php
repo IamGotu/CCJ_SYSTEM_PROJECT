@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Student;
+use App\Imports\StudentsImport;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
-
 class StudentController extends Controller
 {
     public function index(Request $request)
@@ -37,6 +38,17 @@ class StudentController extends Controller
         return view('student_profile.create');
     }
 
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv',
+        ]);
+
+        Excel::import(new StudentsImport, $request->file('file'));
+
+        return redirect()->route('students.index')->with('success', 'Student data imported successfully.');
+    }
+    
     public function store(Request $request)
     {
         $request->validate([

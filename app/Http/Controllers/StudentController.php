@@ -12,26 +12,22 @@ class StudentController extends Controller
     {
         $query = Student::query();
     
-        // Search filter
-        if ($request->filled('search')) {
-            $search = $request->input('search');
-            $query->where(function($q) use ($search) {
-                $q->where('student_id_number', 'like', "%$search%")
-                  ->orWhere('first_name', 'like', "%$search%")
-                  ->orWhere('middle_name', 'like', "%$search%")
-                  ->orWhere('last_name', 'like', "%$search%");
-            });
+        // Filter by search term and year level if provided
+        if ($request->has('search') && $request->search != '') {
+            $query->where('student_id_number', 'LIKE', '%' . $request->search . '%')
+                  ->orWhere('first_name', 'LIKE', '%' . $request->search . '%')
+                  ->orWhere('last_name', 'LIKE', '%' . $request->search . '%');
         }
     
-        // Year Level filter
-        if ($request->filled('year_level')) {
-            $query->where('year_level', $request->input('year_level'));
+        if ($request->has('year_level') && $request->year_level != '') {
+            $query->where('year_level', $request->year_level);
         }
     
-        $students = $query->paginate(10);
+        // Get students and sort by student_id_number
+        $students = $query->orderBy('student_id_number')->get();
     
         return view('student_profile.index', compact('students'));
-    }
+    }    
     
     public function create()
     {

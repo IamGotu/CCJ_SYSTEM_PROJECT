@@ -14,9 +14,11 @@ HOW TO RUN THE PROJECT (CCJ_SYSTEM_PROJECT)
 
 7. Open terminal located in folder CCJ_SYSTEM_PROJECT and type "npm install"
 
+8. Open terminal located in folder CCJ_SYSTEM_PROJECT and type "composer require maatwebsite/excel"
+
 8. Check if the list requirements (PHP extension php_zip, php_xml, php_gd, php_iconv, php_simplexml, php_xmlreader, php_zlib) for excel import is enabled. Type in the terminal "php -m".
 
-9. To enable the requirements to import excel in PHP (ini.php). Go to xampp find Config(aligned to the module Apache) press it to open PHP (ini.php). Sample to enable: ;extension=zip to extension=zip.
+9. To enable the requirements to import excel in PHP (ini.php). Go to xampp find Config(aligned to the module Apache) press it to open PHP (ini.php). Sample to enable: ;extension=zip, ;extension=xml, ;extension=gd, ;extension=iconv, ;extension=simplexml, ;extension=xmlreader, ;extension=zlib to extension=zip, extension=xml, extension=gd, extension=iconv, extension=simplexml, extension=xmlreader, extension=zlib
 
 10. Navigate to your project folder: example, C:\xampp\htdocs\CCJ_SYSTEM_PROJECT.
 

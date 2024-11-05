@@ -14,33 +14,34 @@ HOW TO RUN THE PROJECT (CCJ_SYSTEM_PROJECT)
 
 7. Open terminal located in folder CCJ_SYSTEM_PROJECT and type "npm install"
 
-8. Enable the zip extension in PHP. Go to xampp find Config(aligned to the module Apache) press it to open PHP (ini.php). Then change ;extension=zip to extension=zip
+8. Check if the list requirements (PHP extension php_zip, php_xml, php_gd, php_iconv, php_simplexml, php_xmlreader, php_zlib) for excel import is enabled. Type in the terminal "php -m".
 
-9. Navigate to your project folder: example, C:\xampp\htdocs\CCJ_SYSTEM_PROJECT.
+9. To enable the requirements to import excel in PHP (ini.php). Go to xampp find Config(aligned to the module Apache) press it to open PHP (ini.php). Sample to enable: ;extension=zip to extension=zip.
 
-10. Right-click the folder and choose Properties.
+10. Navigate to your project folder: example, C:\xampp\htdocs\CCJ_SYSTEM_PROJECT.
 
-11. Go to the "Security" tab and ensure that your user account has the appropriate permissions (read, write, modify).
+11. Right-click the folder and choose Properties.
 
-12. If necessary, edit the permissions to allow full control for your user account.
+12. Go to the "Security" tab and ensure that your user account has the appropriate permissions (read, write, modify).
 
-13. Click Edit, select your user, and check Full Control. Click Apply and then OK to save the changes.
+13. If necessary, edit the permissions to allow full control for your user account.
 
-14. Inside folder CCJ_SYSTEM_PROJECT find the file ".env.example" and change it to ".env"
+14. Click Edit, select your user, and check Full Control. Click Apply and then OK to save the changes.
 
-15. Open the terminal located in folder CCJ_SYSTEM_PROJECT and type "composer install"
+15. Inside folder CCJ_SYSTEM_PROJECT find the file ".env.example" and change it to ".env"
 
-16. Open the terminal located in folder CCJ_SYSTEM_PROJECT and type "php artisan migrate" to migrate the database
+16. Open the terminal located in folder CCJ_SYSTEM_PROJECT and type "composer install"
 
-17. Open the terminal located in folder CCJ_SYSTEM_PROJECT and type "npm run dev"
+17. Open the terminal located in folder CCJ_SYSTEM_PROJECT and type "php artisan migrate" to migrate the database
 
-18. Open the terminal located in folder CCJ_SYSTEM_PROJECT and type "php artisan serve"
+18. Open the terminal located in folder CCJ_SYSTEM_PROJECT and type "npm run dev"
 
-19. If it says no application encryption key has been specified
+19. Open the terminal located in folder CCJ_SYSTEM_PROJECT and type "php artisan serve"
 
-20. In the terminal located in folder social_media_app type "php artisan key:generate"
+20. If it says no application encryption key has been specified
 
-21. Then try again in the terminal located in folder social_media_app the "php artisan serve"
+21. In the terminal located in folder social_media_app type "php artisan key:generate"
 
-22. Open the running server or Ctrl+click the following link
+22. Then try again in the terminal located in folder social_media_app the "php artisan serve"
 
+23. Open the running server or Ctrl+click the following link

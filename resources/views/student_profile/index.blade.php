@@ -7,18 +7,18 @@
 
         <div class="py-1">
             <div class="max-w mx-auto sm:px-6 lg:px-5">
-                <!-- Search and Filter Section -->
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-4 space-y-2 sm:space-y-0">
-                    <!-- Add Student Button -->
-                    <a href="{{ route('students.create') }}" class="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition duration-200">
-                        Add Student
-                    </a>
 
-                    <!-- Import Students Form -->
                     <div class="flex items-center space-x-2">
+                        <!-- Add Student Button -->
+                        <a href="{{ route('students.create') }}" class="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition duration-200">
+                            Add Student
+                        </a>
+                        
+                        <!-- Import Students Button -->
                         <form action="{{ route('students.import') }}" method="POST" enctype="multipart/form-data" class="flex items-center">
                             @csrf
-                            <input type="file" name="file" required class="p-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-gray-200">
+                            <input type="file" name="file" required class="p-1 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-gray-200" style="width: 220px;">
                             <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-200 ml-2">
                                 Import Students
                             </button>

@@ -20,6 +20,10 @@
                     <x-nav-link :href="route('ojt.records')" :active="request()->routeIs('ojt.records')">
                         {{ __('OJT Records') }}
                     </x-nav-link>
+                    <x-responsive-nav-link :href="route('derogatory_records.index')" :active="request()->routeIs('derogatory_records.*')">
+                        {{ __('Derogatory 
+                            Records') }}
+                    </x-responsive-nav-link> 
                 </div>
             </div>
 

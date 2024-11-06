@@ -8,7 +8,25 @@ use Illuminate\Http\Request;
 class DerogatoryRecordController extends Controller
 {
     // Show the form to create a new derogatory record
-    public function create()
+    
+    public function index(Request $request)
+{
+    // Fetch records based on search query if provided
+    $query = DerogatoryRecord::query();
+
+    if ($request->has('search') && $request->search != '') {
+        $search = $request->search;
+        $query->where(function ($q) use ($search) {
+            $q->where('student_number', 'like', "%{$search}%")
+                ->orWhere('last_name', 'like', "%{$search}%")
+                ->orWhere('first_name', 'like', "%{$search}%");
+        });
+    }
+
+    $derogatoryRecords = $query->get();
+    return view('derogatory_records.index', compact('derogatoryRecords'));
+}
+public function create()
     {
         return view('derogatory_records.create');
     }

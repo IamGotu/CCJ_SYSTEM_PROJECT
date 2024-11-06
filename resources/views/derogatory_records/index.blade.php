@@ -1,4 +1,3 @@
-<!-- resources/views/derogatory_records/index.blade.php -->
 @extends('layouts.app')
 
 @section('content')
@@ -7,7 +6,7 @@
     <p class="mb-4">This module contains records of students with derogatory notes. Below is the list of students with their details.</p>
     
     <!-- Search Filter -->
-    <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Search by student initials or student number..." title="Type student initials">
+    <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Search by student initials or student number..." title="Type student initials or student number">
 
     <!-- Button to Open Create Modal -->
     <button onclick="document.getElementById('createForm').style.display='block'" class="bg-green-500 text-white px-4 py-2 rounded mb-4">Add New Record</button>
@@ -49,7 +48,7 @@
 
     <!-- Create Record Modal -->
     <div id="createForm" class="modal hidden fixed inset-0 bg-gray-700 bg-opacity-50 flex justify-center items-center">
-        <form action="{{ route('derogatory_records.store') }}" method="POST" class="bg-white p-6 rounded">
+        <form action="{{ route('derogatory_records.store') }}" method="POST" class="bg-white p-6 rounded" id="createRecordForm">
             @csrf
             <h3 class="text-xl font-semibold mb-4">Add New Derogatory Record</h3>
             
@@ -139,24 +138,39 @@
                 <option value="others">Others</option>
             </select>
 
-            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Update Record</button>
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Save Changes</button>
             <button type="button" onclick="document.getElementById('editForm').style.display='none'" class="bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
         </form>
     </div>
 </main>
 
 <script>
-    // JavaScript for handling the Edit Record modal display
-    function editRecord(recordId) {
-        // Load the record data via AJAX or set manually for now
-        document.getElementById('editForm').style.display = 'block';
-        // Set action URL and form data for editing the record (replace with actual record data if using AJAX)
-        document.getElementById('editRecordForm').action = `/derogatory_records/${recordId}`;
+    function filterTable() {
+        let input = document.getElementById('searchInput');
+        let filter = input.value.toUpperCase();
+        let table = document.getElementById('studentsTable');
+        let rows = table.getElementsByTagName('tr');
+        
+        for (let i = 1; i < rows.length; i++) {
+            let cells = rows[i].getElementsByTagName('td');
+            let studentNumber = cells[0].textContent || cells[0].innerText;
+            let lastName = cells[1].textContent || cells[1].innerText;
+            let firstName = cells[2].textContent || cells[2].innerText;
+            if (studentNumber.toUpperCase().indexOf(filter) > -1 || 
+                lastName.toUpperCase().indexOf(filter) > -1 || 
+                firstName.toUpperCase().indexOf(filter) > -1) {
+                    rows[i].style.display = "";
+            } else {
+                rows[i].style.display = "none";
+            }
+        }
     }
 
-    // Filter table for search functionality
-    function filterTable() {
-        // Implement search functionality
+    function editRecord(id) {
+        // Fetch record data and populate the edit modal
+        // This function can make an AJAX call to fetch the record and populate fields in the modal
+        // For now, it's just a placeholder function
     }
 </script>
+
 @endsection

@@ -23,9 +23,7 @@ Route::post('/students', [StudentController::class, 'store'])->name('students.st
 Route::get('/students/{student}/edit', [StudentController::class, 'edit'])->name('students.edit');
 Route::put('/students/{student}', [StudentController::class, 'update'])->name('students.update');
 Route::delete('/students/{student}', [StudentController::class, 'destroy'])->name('students.destroy');
-
-// Import students info using excel
-Route::post('/students/import', [StudentController::class, 'import'])->name('students.import');
+Route::post('/students/import', [StudentController::class, 'import'])->name('students.import'); // Import students info using excel
 
 // Intern routes
 Route::middleware(['auth'])->group(function () {
@@ -47,10 +45,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/coordinator/store', [CoordinatorController::class, 'store'])->name('coordinator.store');
     Route::resource('coordinators', CoordinatorController::class);
 
-    // routes/web.php
 // Route to display the list of derogatory records
-
 Route::get('/derogatory_records', [DerogatoryRecordController::class, 'index'])->name('derogatory_records.index');
+Route::resource('derogatory_records', DerogatoryRecordController::class);
 
 // Route to display the form for creating a new derogatory record
 Route::get('/derogatory_records/create', [DerogatoryRecordController::class, 'create'])->name('derogatory_records.create');

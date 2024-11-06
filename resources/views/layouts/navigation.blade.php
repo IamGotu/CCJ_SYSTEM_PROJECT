@@ -14,15 +14,15 @@
                     <x-nav-link :href="route('student.profile')" :active="request()->routeIs('student.profile')">
                         {{ __('Student Profile') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('derogatory_records.index')" :active="request()->routeIs('derogatory_records.*')">
+                        {{ __('Derogatory Records') }}
+                    </x-nav-link>
                     <x-nav-link :href="route('intern.profile')" :active="request()->routeIs('intern.profile')">
                         {{ __('Intern Profile') }}
                     </x-nav-link>
                     <x-nav-link :href="route('ojt.records')" :active="request()->routeIs('ojt.records')">
                         {{ __('OJT Records') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('derogatory_records.index')" :active="request()->routeIs('derogatory_records.*')">
-                        {{ __('Derogatory Records') }}
-                    </x-nav-link> 
                 </div>
             </div>
 

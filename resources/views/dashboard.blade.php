@@ -16,6 +16,9 @@
                     <button onclick="switchTab('interns')" id="internsTab" class="px-6 py-3 text-gray-600 hover:text-blue-600">
                         Interns
                     </button>
+                    <button onclick="switchTab('derogatory-records')" id="derogatory-records-tab" class="px-6 py-3 text-gray-600 hover:text-blue-600">
+                        Derogatory Records
+                    </button>
                 </div>
             </div>
         </div>

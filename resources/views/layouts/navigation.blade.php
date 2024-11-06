@@ -14,6 +14,13 @@
                     <x-nav-link :href="route('student.profile')" :active="request()->routeIs('student.profile')">
                         {{ __('Student Profile') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('intern.profile')" :active="request()->routeIs('intern.profile')">
+                        {{ __('Intern Profile') }}
+                    </x-nav-link>
+                                        <x-responsive-nav-link :href="route('derogatory_records.index')" :active="request()->routeIs('derogatory_records.*')">
+                        {{ __('Derogatory 
+                            Records') }}
+                    </x-responsive-nav-link>          
                 </div>
             </div>
 
@@ -65,6 +72,9 @@
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('student.profile')" :active="request()->routeIs('student.profile')">
                 {{ __('Student Profile') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('intern.profile')" :active="request()->routeIs('intern.profile')">
+                {{ __('Intern Profile') }}
             </x-responsive-nav-link>
         </div>
 

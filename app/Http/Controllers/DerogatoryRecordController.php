@@ -7,26 +7,32 @@ use Illuminate\Http\Request;
 
 class DerogatoryRecordController extends Controller
 {
-    // Show the form to create a new derogatory record
-    
-    public function index(Request $request)
+    public function show($id)
 {
-    // Fetch records based on search query if provided
-    $query = DerogatoryRecord::query();
+    $record = DerogatoryRecord::findOrFail($id);
+    \Log::info('Record Data:', (array) $record); // This logs the data to the log file
+    return response()->json($record); // Return JSON response
+}
 
-    if ($request->has('search') && $request->search != '') {
-        $search = $request->search;
-        $query->where(function ($q) use ($search) {
-            $q->where('student_number', 'like', "%{$search}%")
-                ->orWhere('last_name', 'like', "%{$search}%")
-                ->orWhere('first_name', 'like', "%{$search}%");
-        });
+    public function index(Request $request)
+    {
+        // Fetch records based on search query if provided
+        $query = DerogatoryRecord::query();
+
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('student_number', 'like', "%{$search}%")
+                    ->orWhere('last_name', 'like', "%{$search}%")
+                    ->orWhere('first_name', 'like', "%{$search}%");
+            });
+        }
+
+        $derogatoryRecords = $query->get();
+        return view('derogatory_records.index', compact('derogatoryRecords'));
     }
 
-    $derogatoryRecords = $query->get();
-    return view('derogatory_records.index', compact('derogatoryRecords'));
-}
-public function create()
+    public function create()
     {
         return view('derogatory_records.create');
     }
@@ -34,24 +40,30 @@ public function create()
     // Store a newly created derogatory record in storage
     public function store(Request $request)
     {
-        // Validate the incoming request
+        // Validate the incoming request data
         $validated = $request->validate([
             'student_number' => 'required|unique:derogatory_records,student_number',
             'last_name' => 'required',
             'first_name' => 'required',
             'middle_name' => 'nullable',
             'year_graduated' => 'nullable|numeric',
-            'violation' => 'required',
+            'violation' => 'nullable',
             'action_taken' => 'nullable',
             'settled' => 'nullable|boolean',
-            'sanction' => 'nullable',
+            'sanction' => 'nullable|in:suspension,expulsion,verbal_warning,written_warning,others',
         ]);
 
-        // Store the new derogatory record with validated data
-        DerogatoryRecord::create($validated);
+        // Convert 'yes'/'no' to boolean for settled
+        $validated['settled'] = ($validated['settled'] === 'yes');
 
-        // Redirect with a success message
-        return redirect()->route('derogatory_records.index')->with('success', 'Record added successfully');
+        // Insert the validated data into the database
+        try {
+            DerogatoryRecord::create($validated);
+            return redirect()->route('derogatory_records.index')->with('success', 'Record added successfully');
+        } catch (\Exception $e) {
+            \Log::error('Error inserting data: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Something went wrong. Please try again.');
+        }
     }
 
     // Show the form to edit an existing derogatory record
@@ -64,6 +76,9 @@ public function create()
     // Update the specified derogatory record in storage
     public function update(Request $request, $id)
     {
+        // Log the request data
+        \Log::info($request->all());
+
         // Validate the incoming request, including exception for the current record's student_number
         $validated = $request->validate([
             'student_number' => 'required|unique:derogatory_records,student_number,' . $id,
@@ -77,7 +92,7 @@ public function create()
             'sanction' => 'nullable',
         ]);
 
-        // Find the existing derogatory record and update it with validated data
+        // Update the derogatory record with validated data
         $record = DerogatoryRecord::findOrFail($id);
         $record->update($validated);
 
@@ -85,13 +100,12 @@ public function create()
         return redirect()->route('derogatory_records.index')->with('success', 'Record updated successfully');
     }
 
-    // Delete the specified derogatory record from storage
+    // Handle deleting a derogatory record
     public function destroy($id)
     {
-        // Delete the derogatory record by its ID
-        DerogatoryRecord::destroy($id);
+        $record = DerogatoryRecord::findOrFail($id);
+        $record->delete();
 
-        // Redirect with a success message
         return redirect()->route('derogatory_records.index')->with('success', 'Record deleted successfully');
     }
 }

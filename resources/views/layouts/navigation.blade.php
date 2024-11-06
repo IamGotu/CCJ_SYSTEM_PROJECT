@@ -17,6 +17,10 @@
                     <x-nav-link :href="route('intern.profile')" :active="request()->routeIs('intern.profile')">
                         {{ __('Intern Profile') }}
                     </x-nav-link>
+                                        <x-responsive-nav-link :href="route('derogatory_records.index')" :active="request()->routeIs('derogatory_records.*')">
+                        {{ __('Derogatory 
+                            Records') }}
+                    </x-responsive-nav-link>          
                 </div>
             </div>
 

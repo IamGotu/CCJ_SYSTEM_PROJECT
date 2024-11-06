@@ -41,6 +41,7 @@ Route::middleware(['auth'])->group(function () {
 
     // routes/web.php
 // Route to display the list of derogatory records
+
 Route::get('/derogatory_records', [DerogatoryRecordController::class, 'index'])->name('derogatory_records.index');
 
 // Route to display the form for creating a new derogatory record

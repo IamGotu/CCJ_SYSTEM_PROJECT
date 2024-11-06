@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\InternController;
+use App\Http\Controllers\DerogatoryRecordController;
 use Illuminate\Support\Facades\Route;
 
 // Redirect root URL to /login
@@ -39,7 +40,26 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // routes/web.php
-Route::get('/derogatory-records', [DerogatoryRecordController::class, 'index'])->name('derogatory.records');
+// Route to display the list of derogatory records
+Route::get('/derogatory_records', [DerogatoryRecordController::class, 'index'])->name('derogatory_records.index');
+
+// Route to display the form for creating a new derogatory record
+Route::get('/derogatory_records/create', [DerogatoryRecordController::class, 'create'])->name('derogatory_records.create');
+
+// Route to handle storing the new derogatory record
+Route::post('/derogatory_records', [DerogatoryRecordController::class, 'store'])->name('derogatory_records.store');
+
+// Route to show a specific derogatory record's details
+Route::get('/derogatory_records/{id}', [DerogatoryRecordController::class, 'show'])->name('derogatory_records.show');
+
+// Route to display the form for editing an existing derogatory record
+Route::get('/derogatory_records/{id}/edit', [DerogatoryRecordController::class, 'edit'])->name('derogatory_records.edit');
+
+// Route to handle updating the derogatory record
+Route::put('/derogatory_records/{id}', [DerogatoryRecordController::class, 'update'])->name('derogatory_records.update');
+
+// Route to handle deleting a derogatory record
+Route::delete('/derogatory_records/{id}', [DerogatoryRecordController::class, 'destroy'])->name('derogatory_records.destroy');
 
 });
 

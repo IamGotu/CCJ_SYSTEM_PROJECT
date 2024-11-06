@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\OjtRecordsController;
+use App\Http\Controllers\CoordinatorController;
 use App\Http\Controllers\InternController;
 use App\Http\Controllers\DerogatoryRecordController;
 use Illuminate\Support\Facades\Route;
@@ -38,6 +40,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    //OJT Records and coordinator routes
+    Route::get('/ojt-records', [OjtRecordsController::class, 'index'])->name('ojt.records');
+    Route::resource('ojt_records', OjtRecordsController::class);
+    Route::post('/coordinator/store', [CoordinatorController::class, 'store'])->name('coordinator.store');
+    Route::resource('coordinators', CoordinatorController::class);
 
     // routes/web.php
 // Route to display the list of derogatory records

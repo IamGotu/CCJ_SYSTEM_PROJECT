@@ -51,44 +51,46 @@
             </div>
         </div>
 
-        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg mt-4">
-            <div class="p-6 text-gray-900 dark:text-gray-100">
-                <div class="overflow-x-auto">
-                    <table class="min-w-full bg-white dark:bg-gray-700">
-                        <thead>
-                            <tr class="bg-gray-100 dark:bg-gray-600 text-gray-600 dark:text-gray-200 uppercase text-xs leading-normal">
-                                <th class="py-2 px-4 text-center">Student Number</th>
-                                <th class="py-2 px-4 text-center">Name</th>
-                                <th class="py-2 px-4 text-center">Agency Assigned</th>
-                                <th class="py-2 px-4 text-center">Credit Hours Earned</th>
-                                <th class="py-2 px-4 text-center">Year Level</th>
-                                <th class="py-2 px-4 text-center">Coordinator Assigned</th>
-                                <th class="py-2 px-4 text-center">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody class="text-gray-600 dark:text-gray-400 text-sm font-light">
-                            @foreach ($ojtRecords as $record)
+        <div class="overflow-x-auto mt-6 px-4 sm:px-6 lg:px-5">
+            <table class="min-w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600">
+                <thead class="bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-300 text-xs font-medium uppercase tracking-wider">
+                    <tr>
+                        <th class="py-6 px-4 text-center">Student Number</th>
+                        <th class="py-6 px-4 text-center">Name</th>
+                        <th class="py-6 px-4 text-center">Agency Assigned</th>
+                        <th class="py-6 px-4 text-center">Credit Hours Earned</th>
+                        <th class="py-6 px-4 text-center">Year Level</th>
+                        <th class="py-6 px-4 text-center">Coordinator Assigned</th>
+                        <th class="py-6 px-4 text-center">Action</th>
+                    </tr>
+                </thead>
+                <tbody class="text-gray-600 dark:text-gray-400 text-sm font-light">
+                    @if($ojtRecords->isEmpty())
+                        <tr>
+                            <td colspan="7" class="py-4 text-center text-gray-500 dark:text-gray-300">No records found</td>
+                        </tr>
+                    @else
+                        @foreach ($ojtRecords as $record)
                             <tr class="border-b border-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-200">
-                                    <td class="py-2 px-4 text-center">{{ $record->student_number }}</td>
-                                    <td class="py-2 px-4 text-center">{{ $record->name }}</td>
-                                    <td class="py-2 px-4 text-center">{{ $record->agency_assigned }}</td>
-                                    <td class="py-2 px-4 text-center">{{ $record->credit_hours }}</td>
-                                    <td class="py-2 px-4 text-center">{{ $record->year_level }}</td> 
-                                    <td class="py-2 px-4 text-center">{{ $record->coordinator->name ?? 'N/A' }}</td>
-                                    <td class="py-2 px-4 text-center">
-                                        <a href="{{ route('ojt_records.edit', $record) }}" class="text-blue-500 hover:text-blue-700">Edit</a>
-                                        <form action="{{ route('ojt_records.destroy', $record) }}" method="POST" style="display:inline;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="text-red-500 hover:text-red-700 ml-2">Delete</button>
-                                        </form>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+                                <td class="py-6 px-4 text-center">{{ $record->student_number }}</td>
+                                <td class="py-6 px-4 text-center">{{ $record->name }}</td>
+                                <td class="py-6 px-4 text-center">{{ $record->agency_assigned }}</td>
+                                <td class="py-6 px-4 text-center">{{ $record->credit_hours }}</td>
+                                <td class="py-6 px-4 text-center">{{ $record->year_level }}</td>
+                                <td class="py-6 px-4 text-center">{{ $record->coordinator->name ?? 'N/A' }}</td>
+                                <td class="py-6 px-4 text-center">
+                                    <a href="{{ route('ojt_records.edit', $record) }}" class="text-blue-500 hover:text-blue-700">Edit</a>
+                                    <form action="{{ route('ojt_records.destroy', $record) }}" method="POST" style="display:inline;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-red-500 hover:text-red-700 ml-2">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @endforeach
+                    @endif
+                </tbody>
+            </table>
         </div>
     </div>
 </x-app-layout>

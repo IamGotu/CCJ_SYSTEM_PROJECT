@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight"">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
             {{ __('Coordinators') }}
         </h2>
     </x-slot>
@@ -49,7 +49,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($coordinators as $coordinator)
+                    @forelse($coordinators as $coordinator)
                         <tr>
                             <td class="py-6 px-4 text-center">{{ $coordinator->name }}</td>
                             <td class="py-6 px-4 text-center">{{ $coordinator->contact }}</td>
@@ -65,7 +65,11 @@
                                 </form>
                             </td>
                         </tr>
-                    @endforeach
+                    @empty
+                        <tr>
+                            <td colspan="6" class="py-6 px-4 text-center text-gray-500">No records found</td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>

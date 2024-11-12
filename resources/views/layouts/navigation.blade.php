@@ -4,14 +4,14 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('student.profile') }}">
+                    <a href="{{ route('dashboard') }}">
                         <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
                     </a>
                 </div>
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('student.profile')" :active="request()->routeIs('student.profile')">
+                    <x-nav-link :href="route('students.index')" :active="request()->routeIs('students.index')">
                         {{ __('Students Profile') }}
                     </x-nav-link>
                     <x-nav-link :href="route('derogatory_records.index')" :active="request()->routeIs('derogatory_records.*')">
@@ -72,7 +72,7 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('student.profile')" :active="request()->routeIs('student.profile')">
+            <x-responsive-nav-link :href="route('students.index')" :active="request()->routeIs('students.index')">
                 {{ __('Student Profile') }}
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('intern.profile')" :active="request()->routeIs('intern.profile')">

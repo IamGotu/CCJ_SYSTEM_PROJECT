@@ -7,14 +7,15 @@ use App\Http\Controllers\CoordinatorController;
 use App\Http\Controllers\InternController;
 use App\Http\Controllers\DerogatoryRecordController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
-// Redirect root URL to /login
-Route::get('/', function () {
-    return redirect('/login');
-});
+    Route::get('/', function () {
+        return Auth::check() ? redirect('/dashboard') : redirect('/login');
+    });
 
-    // Dashboard route
-    Route::get('/dashboard', [StudentController::class, 'index'])->name('student.profile');
+    Route::get('/dashboard', function () {
+        return view('dashboard');  // Adjust to your actual dashboard view name
+    })->name('dashboard')->middleware('auth');
 
     // Student routes
     Route::get('/students', [StudentController::class, 'index'])->name('students.index');
@@ -67,6 +68,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Route to handle deleting a derogatory record
     Route::delete('/derogatory_records/{id}', [DerogatoryRecordController::class, 'destroy'])->name('derogatory_records.destroy');
+
 });
 
 require __DIR__.'/auth.php';

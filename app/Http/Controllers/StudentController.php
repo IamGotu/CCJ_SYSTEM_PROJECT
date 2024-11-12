@@ -27,7 +27,14 @@ class StudentController extends Controller
         $students = $query->orderBy('student_id_number')->get();
     
         return view('student_profile.index', compact('students'));
-    }    
+    }
+
+    public function show($id)
+    {
+        $student = Student::findOrFail($id);
+        return view('student_profile.view-profile', compact('student'));
+    }
+
     
     public function create()
     {

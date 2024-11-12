@@ -77,7 +77,7 @@
                 </thead>
                 <tbody class="text-gray-600 dark:text-gray-400 text-sm font-light">
                     @forelse ($students as $student)
-                        <tr class="border-b border-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-200">
+                        <tr onclick="window.location='{{ route('students.show', $student->id) }}'" class="border-b border-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-200">
                             <td class="py-6 px-4 text-center">{{ $student->student_id_number }}</td>
                             <td class="py-6 px-4 text-center">{{ $student->first_name }} {{ $student->middle_name }} {{ $student->last_name }} {{ $student->suffix }}</td>
                             <td class="py-6 px-4 text-center">{{ $student->birthdate->format('Y-m-d') }}</td>

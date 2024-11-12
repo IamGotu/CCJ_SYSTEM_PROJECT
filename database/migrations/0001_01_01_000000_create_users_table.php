@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Hash;
 
 return new class extends Migration
 {
@@ -35,6 +36,18 @@ return new class extends Migration
             $table->longText('payload');
             $table->integer('last_activity')->index();
         });
+
+        // Check if the user with this email already exists
+        if (!\DB::table('users')->where('email', 'admin@gmail.com')->exists()) {
+            // Add the default user entry if it does not exist
+            \DB::table('users')->insert([
+                'name' => 'Admin',
+                'email' => 'admin@gmail.com',
+                'password' => Hash::make('admin123'),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
     }
 
     /**
@@ -47,3 +60,4 @@ return new class extends Migration
         Schema::dropIfExists('sessions');
     }
 };
+

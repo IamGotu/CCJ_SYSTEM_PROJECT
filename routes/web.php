@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\OjtRecordsController;
+use App\Http\Controllers\CoordinatorController;
 use App\Http\Controllers\InternController;
 use App\Http\Controllers\DerogatoryRecordController;
 use Illuminate\Support\Facades\Route;
@@ -21,9 +23,7 @@ Route::post('/students', [StudentController::class, 'store'])->name('students.st
 Route::get('/students/{student}/edit', [StudentController::class, 'edit'])->name('students.edit');
 Route::put('/students/{student}', [StudentController::class, 'update'])->name('students.update');
 Route::delete('/students/{student}', [StudentController::class, 'destroy'])->name('students.destroy');
-
-// Import students info using excel
-Route::post('/students/import', [StudentController::class, 'import'])->name('students.import');
+Route::post('/students/import', [StudentController::class, 'import'])->name('students.import'); // Import students info using excel
 
 // Intern routes
 Route::middleware(['auth'])->group(function () {
@@ -39,9 +39,15 @@ Route::middleware(['auth'])->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // routes/web.php
+    //OJT Records and coordinator routes
+    Route::get('/ojt-records', [OjtRecordsController::class, 'index'])->name('ojt.records');
+    Route::resource('ojt_records', OjtRecordsController::class);
+    Route::post('/coordinator/store', [CoordinatorController::class, 'store'])->name('coordinator.store');
+    Route::resource('coordinators', CoordinatorController::class);
+
 // Route to display the list of derogatory records
 Route::get('/derogatory_records', [DerogatoryRecordController::class, 'index'])->name('derogatory_records.index');
+Route::resource('derogatory_records', DerogatoryRecordController::class);
 
 // Route to display the form for creating a new derogatory record
 Route::get('/derogatory_records/create', [DerogatoryRecordController::class, 'create'])->name('derogatory_records.create');

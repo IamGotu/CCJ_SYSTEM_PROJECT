@@ -10,11 +10,6 @@
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-4 space-y-2 sm:space-y-0">
 
                 <div class="flex items-center space-x-2">
-                    <!-- Add Student Button -->
-                    <a href="{{ route('students.create') }}" class="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition duration-200">
-                        Add Student
-                    </a>
-                    
                     <!-- Import Students Button -->
                     <form action="{{ route('students.import') }}" method="POST" enctype="multipart/form-data" class="flex items-center">
                         @csrf
@@ -70,6 +65,7 @@
                         <th class="py-6 px-4 text-center">Contact Number</th>
                         <th class="py-6 px-4 text-center">Guardian</th>
                         <th class="py-6 px-4 text-center">Guardian Contact</th>
+                        <th class="py-6 px-4 text-center">School Year</th>
                         <th class="py-6 px-4 text-center">Year Level</th>
                         <th class="py-6 px-4 text-center">Graduation Date</th>
                         <th class="py-6 px-4 text-center">Action</th>
@@ -94,7 +90,8 @@
                                 {{ implode(' and ', array_filter([$student->father_contact, $student->mother_contact])) ?: $student->guardian_contact }}
                             </td>
 
-                            <!-- Year Level -->
+                            <!-- Standing -->
+                             <td class="py-6 px-4 text-center">{{ $student->school_year }}</td>
                             <td class="py-2 px-4 text-center">{{ $student->year_level }}</td>
                             <td class="py-2 px-4 text-center">{{ $student->graduation_date ? $student->graduation_date->format('Y-m-d') : 'N/A' }}</td>
                             <td class="py-2 px-4 text-center">

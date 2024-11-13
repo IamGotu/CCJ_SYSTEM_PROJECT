@@ -32,6 +32,7 @@ class StudentsImport implements ToModel, WithHeadingRow
         $student->father_contact = $row['father_contact'];
         $student->mother_contact = $row['mother_contact'];
         $student->guardian_contact = $row['guardian_contact'];
+        $student->school_year = $row['school_year'];
         $student->year_level = $row['year_level'];
         $student->graduation_date = $row['graduation_date'];
 

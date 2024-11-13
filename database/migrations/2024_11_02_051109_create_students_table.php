@@ -30,6 +30,7 @@ class CreateStudentsTable extends Migration
             $table->string('father_contact')->nullable();
             $table->string('mother_contact')->nullable();
             $table->string('guardian_contact')->nullable();
+            $table->string('school_year')->nullable();
             $table->string('year_level');
             $table->date('graduation_date')->nullable();
             $table->timestamps();

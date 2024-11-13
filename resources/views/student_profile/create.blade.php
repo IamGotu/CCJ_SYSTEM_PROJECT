@@ -33,6 +33,7 @@
                             'father_contact' => 'Father Contact',
                             'mother_contact' => 'Mother Contact',
                             'guardian_contact' => 'Guardian Contact',
+                            'school_year' => 'School Year',
                         ] as $name => $label)
                             <div class="mb-4">
                                 <label for="{{ $name }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ $label }}</label>

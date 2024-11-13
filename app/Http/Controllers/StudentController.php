@@ -75,6 +75,7 @@ class StudentController extends Controller
             'father_contact' => 'nullable',
             'mother_contact' => 'nullable',
             'guardian_contact' => 'nullable',
+            'school_year' => 'nullable',
             'year_level' => 'required',
             'graduation_date' => 'nullable|date',
         ]);
@@ -113,6 +114,7 @@ class StudentController extends Controller
             'father_contact' => 'nullable|string|max:255',
             'mother_contact' => 'nullable|string|max:255',
             'guardian_contact' => 'nullable|string|max:255',
+            'school_year' => 'nullable|string|max:255',
             'year_level' => 'required|string',
             'graduation_date' => 'nullable|date',
         ]);

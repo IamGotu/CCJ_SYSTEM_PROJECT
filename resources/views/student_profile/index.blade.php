@@ -32,13 +32,13 @@
                         <!-- Year Level Filter Dropdown -->
                         <select name="year_level" class="p-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-gray-200 w-full sm:w-auto">
                             <option value="">Filter by Year Level</option>
-                            <option value="1ST" {{ request('year_level') == '1ST' ? 'selected' : '' }}>1ST</option>
-                            <option value="2ND" {{ request('year_level') == '2ND' ? 'selected' : '' }}>2ND</option>
-                            <option value="3RD" {{ request('year_level') == '3RD' ? 'selected' : '' }}>3RD</option>
-                            <option value="4TH" {{ request('year_level') == '4TH' ? 'selected' : '' }}>4TH</option>
-                            <option value="GRADUATE" {{ request('year_level') == 'GRADUATE' ? 'selected' : '' }}>GRADUATE</option>
+                            <option value="Freshman" {{ request('year_level') == 'Freshman' ? 'selected' : '' }}>Freshmen</option>
+                            <option value="Sophomore" {{ request('year_level') == 'Sophomore' ? 'selected' : '' }}>Sophomores</option>
+                            <option value="Junior" {{ request('year_level') == 'Junior' ? 'selected' : '' }}>Juniors</option>
+                            <option value="SENIOR" {{ request('year_level') == 'SENIOR' ? 'selected' : '' }}>Seniors</option>
+                            <option value="Super Senior" {{ request('year_level') == 'Super Senior' ? 'selected' : '' }}>Super Seniors</option>
+                            <option value="Alumnus/Alumna" {{ request('year_level') == 'Alumnus/Alumna' ? 'selected' : '' }}>Alumni</option>
                         </select>
-
                         <!-- Search Button -->
                         <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-200">
                             Search
@@ -60,11 +60,7 @@
                     <tr>
                         <th class="py-6 px-4 text-center">Student ID Number</th>
                         <th class="py-6 px-4 text-center">Name</th>
-                        <th class="py-6 px-4 text-center">Birthdate</th>
-                        <th class="py-6 px-4 text-center">Address</th>
                         <th class="py-6 px-4 text-center">Contact Number</th>
-                        <th class="py-6 px-4 text-center">Guardian</th>
-                        <th class="py-6 px-4 text-center">Guardian Contact</th>
                         <th class="py-6 px-4 text-center">School Year</th>
                         <th class="py-6 px-4 text-center">Year Level</th>
                         <th class="py-6 px-4 text-center">Graduation Date</th>
@@ -76,19 +72,7 @@
                         <tr onclick="window.location='{{ route('students.show', $student->id) }}'" class="border-b border-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-200">
                             <td class="py-6 px-4 text-center">{{ $student->student_id_number }}</td>
                             <td class="py-6 px-4 text-center">{{ $student->first_name }} {{ $student->middle_name }} {{ $student->last_name }} {{ $student->suffix }}</td>
-                            <td class="py-6 px-4 text-center">{{ $student->birthdate->format('Y-m-d') }}</td>
-                            <td class="py-6 px-4 text-center">{{ $student->purok }} {{ $student->street_num }} {{ $student->street_name }} {{ $student->barangay }} {{ $student->city }} {{ $student->state }}</td>
                             <td class="py-6 px-4 text-center">{{ $student->contact_number ?? 'N/A' }}</td>
-
-                            <!-- Guardian Name Logic -->
-                            <td class="py-6 px-4 text-center">
-                                {{ implode(' and ', array_filter([$student->father_name, $student->mother_name])) ?: $student->guardian_name }}
-                            </td>
-
-                            <!-- Guardian Contact Logic -->
-                            <td class="py-6 px-4 text-center">
-                                {{ implode(' and ', array_filter([$student->father_contact, $student->mother_contact])) ?: $student->guardian_contact }}
-                            </td>
 
                             <!-- Standing -->
                              <td class="py-6 px-4 text-center">{{ $student->school_year }}</td>

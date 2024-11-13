@@ -174,11 +174,12 @@
                             <select name="year_level" required
                                     class="mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-400 dark:bg-gray-700 dark:text-gray-200">
                                 <option value="" disabled>Select Year Level</option>
-                                <option value="1ST" {{ old('year_level', $student->year_level) === '1ST' ? 'selected' : '' }}>1ST</option>
-                                <option value="2ND" {{ old('year_level', $student->year_level) === '2ND' ? 'selected' : '' }}>2ND</option>
-                                <option value="3RD" {{ old('year_level', $student->year_level) === '3RD' ? 'selected' : '' }}>3RD</option>
-                                <option value="4TH" {{ old('year_level', $student->year_level) === '4TH' ? 'selected' : '' }}>4TH</option>
-                                <option value="GRADUATE" {{ old('year_level', $student->year_level) === 'GRADUATE' ? 'selected' : '' }}>GRADUATE</option>
+                                <option value="Freshman" {{ old('year_level', $student->year_level) === 'Freshman' ? 'selected' : '' }}>Freshman</option>
+                                <option value="Sophomore" {{ old('year_level', $student->year_level) === 'Sophomore' ? 'selected' : '' }}>Sophomore</option>
+                                <option value="Junior" {{ old('year_level', $student->year_level) === 'Junior' ? 'selected' : '' }}>Junior</option>
+                                <option value="Junior" {{ old('year_level', $student->year_level) === 'Senior' ? 'selected' : '' }}>Senior</option>
+                                <option value="Super Senior" {{ old('year_level', $student->year_level) === 'Super Senior' ? 'selected' : '' }}>Super Senior</option>
+                                <option value="Alumnus/Alumna" {{ old('year_level', $student->year_level) === 'Alumnus/Alumna' ? 'selected' : '' }}>Alumnus/Alumna</option>
                             </select>
                         </div>
 

@@ -1,4 +1,8 @@
 ﻿student_id_number,first_name,middle_name,last_name,suffix,birthdate,purok,street_num,street_name,barangay,city,state,contact_number,father_name,mother_name,guardian_name,father_contact,mother_contact,guardian_contact,school_year,year_level,graduation_date
-2023001,John,Doe,Smith,,01/01/2005,Purok 1,123,Main St,Barangay 1,City A,State A,9123456789,Father 1,,,9123456701,,,2022-2023,GRADUATE,01/06/2023
-2023002,Jane,Anne,Doe,Jr.,02/02/2005,Purok 2,456,Second St,Barangay 2,City B,State B,9234567890,,,Guardian 1,,,9123456722,2024-2025,2ND,
-2023003,Mark,David,Johnson,II,03/03/2005,Purok 3,789,Third St,Barangay 3,City C,State C,9345678901,,Mother 1,,,9123456713,,2024-2025,3RD,
+2023001,John,Doe,Smith,,01/01/2005,Purok 1,123,Main St,Barangay 1,City A,State A,9123456789,Father 1,,,9123456701,,,2022-2023,Freshman,
+2023002,Jane,Anne,Doe,Jr.,02/02/2005,Purok 2,456,Second St,Barangay 2,City B,State B,9234567890,,,Guardian 1,,,9123456722,2024-2025,Sophomore,
+2023003,Mark,David,Johnson,II,03/03/2005,Purok 3,789,Third St,Barangay 3,City C,State C,9345678901,,Mother 1,,9123456713,,,2024-2025,Junior,
+2023004,Sarah,Lee,Adams,,04/04/2004,Purok 4,101,Fourth St,Barangay 4,City D,State D,9456789012,Father 2,,,9123456780,,,2024-2025,Senior,
+2023005,Emily,Rae,Clark,,05/05/2003,Purok 5,112,Fifth St,Barangay 5,City E,State E,9567890123,Father 3,,,9123456890,,,2024-2025,Super Senior,
+2023006,Alex,James,White,,06/06/2002,Purok 6,121,Sixth St,Barangay 6,City F,State F,9678901234,Father 4,,,9123456900,,,2022-2023,Alumnus/Alumna,31/05/2023
+2023007,Natalie,Rose,Brown,,07/07/2001,Purok 7,130,Seventh St,Barangay 7,City G,State G,9789012345,Father 5,,,9123456980,,,2023-2024,Alumnus/Alumna,01/06/2024

@@ -6,6 +6,8 @@ use App\Models\Student;
 use App\Imports\StudentsImport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
+use App\Models\Intern;
+
 class StudentController extends Controller
 {
     public function index(Request $request)
@@ -84,8 +86,8 @@ class StudentController extends Controller
 
     public function update(Request $request, Student $student)
     {
-        // Validate the incoming request data
-        $validatedData = $request->validate([
+        $validated = $request->validate([
+            'year_level' => 'required|string',
             'student_id_number' => 'required|string|max:255',
             'first_name' => 'required|string|max:255',
             'middle_name' => 'nullable|string|max:255',
@@ -106,15 +108,41 @@ class StudentController extends Controller
             'father_contact' => 'nullable|string|max:255',
             'mother_contact' => 'nullable|string|max:255',
             'guardian_contact' => 'nullable|string|max:255',
-            'year_level' => 'required|string',
             'graduation_date' => 'nullable|date',
         ]);
-    
-        // Update the student record
-        $student->update($validatedData);
-    
-        // Redirect back with a success message
-        return redirect()->route('students.index')->with('success', 'Student profile updated successfully.');
+
+        // Update student record
+        $student->update($validated);
+
+        // Sync with interns table
+        if (in_array($validated['year_level'], ['3RD', '4TH'])) {
+            // Update or create intern record
+            Intern::updateOrCreate(
+                ['student_number' => $validated['student_id_number']],
+                [
+                    'first_name' => $student->first_name,
+                    'middle_name' => $student->middle_name,
+                    'last_name' => $student->last_name,
+                    'year_level' => $validated['year_level'], // Use the new year level
+                    'guardian' => $student->guardian_name ?? 'Not Specified',
+                    'guardian_contact' => $student->guardian_contact ?? 'Not Specified',
+                    'status' => 'active'
+                ]
+            );
+        } else {
+            // If not 3rd or 4th year, remove from interns
+            Intern::where('student_number', $validated['student_id_number'])->delete();
+        }
+
+        // Add debugging
+        \Log::info('Student Update:', [
+            'student_id' => $validated['student_id_number'],
+            'old_year_level' => $student->getOriginal('year_level'),
+            'new_year_level' => $validated['year_level']
+        ]);
+
+        return redirect()->route('student.profile')
+            ->with('success', 'Student updated successfully');
     }    
 
     public function destroy(Student $student)

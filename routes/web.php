@@ -26,13 +26,11 @@ Route::delete('/students/{student}', [StudentController::class, 'destroy'])->nam
 Route::post('/students/import', [StudentController::class, 'import'])->name('students.import'); // Import students info using excel
 
 // Intern routes
-Route::middleware(['auth'])->group(function () {
+Route::middleware('auth')->group(function () {
     Route::get('/intern-profile', [InternController::class, 'index'])->name('intern.profile');
-    Route::get('/intern-profile/create', [InternController::class, 'create'])->name('intern.create');
-    Route::post('/intern-profile', [InternController::class, 'store'])->name('intern.store');
-    Route::get('/intern-profile/{id}/edit', [InternController::class, 'edit'])->name('intern.edit');
-    Route::put('/intern-profile/{id}', [InternController::class, 'update'])->name('intern.update');
-    Route::delete('/intern-profile/{id}', [InternController::class, 'destroy'])->name('intern.destroy');
+    Route::get('/intern-profile/{intern}/edit', [InternController::class, 'edit'])->name('intern.edit');
+    Route::put('/intern-profile/{intern}', [InternController::class, 'update'])->name('intern.update');
+    Route::delete('/intern-profile/{intern}', [InternController::class, 'destroy'])->name('intern.destroy');
     
     // Profile routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -66,6 +64,16 @@ Route::put('/derogatory_records/{id}', [DerogatoryRecordController::class, 'upda
 
 // Route to handle deleting a derogatory record
 Route::delete('/derogatory_records/{id}', [DerogatoryRecordController::class, 'destroy'])->name('derogatory_records.destroy');
+
+// Add this new route for status updates
+Route::patch('/intern-profile/{intern}/status', [InternController::class, 'updateStatus'])
+    ->name('intern.update.status');
+
+Route::post('/interns/{intern}/upload-document', [InternController::class, 'uploadDocument'])
+    ->name('interns.upload-document');
+
+// Add this route if it doesn't exist
+Route::get('/interns', [InternController::class, 'index'])->name('intern.profile');
 
 });
 

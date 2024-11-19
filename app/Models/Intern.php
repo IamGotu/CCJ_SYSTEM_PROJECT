@@ -8,18 +8,16 @@ class Intern extends Model
 {
     protected $fillable = [
         'student_number',
-        'last_name',
         'first_name',
         'middle_name',
-        'age',
-        'address',
-        'guardian',
-        'guardian_contact',
+        'last_name',
+        'year_level',
         'roster_number',
-        'documents'
+        'documents',
+        'status',
+        'guardian',
+        'guardian_contact'
     ];
 
-    protected $casts = [
-        'documents' => 'array'
-    ];
+    protected $casts = [];
 } 

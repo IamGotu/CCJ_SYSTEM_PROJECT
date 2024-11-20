@@ -6,33 +6,54 @@ use App\Http\Controllers\OjtRecordsController;
 use App\Http\Controllers\CoordinatorController;
 use App\Http\Controllers\InternController;
 use App\Http\Controllers\DerogatoryRecordController;
+use App\Http\Controllers\LoginController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 // Redirect root URL to /login
 Route::get('/', function () {
     return redirect('/login');
 });
 
+// Login routes
+Route::get('/login', function () {
+    // Redirect to dashboard if already logged in
+    if (Auth::check()) {
+        return redirect('/dashboard');
+    }
+    return view('login');
+})->name('login');
+
+Route::post('/login', [LoginController::class, 'login'])->name('login.post');
+
 // Dashboard route
-Route::get('/dashboard', [StudentController::class, 'index'])->name('student.profile');
+Route::get('/dashboard', function () {
+    return view('dashboard', [
+        'totalStudents' => \App\Models\Student::count(),
+        'totalDerogatory' => \App\Models\DerogatoryRecord::count(),
+        'totalInterns' => \App\Models\Intern::count(),
+        'totalOJT' => \App\Models\OJTRecord::count(),
+    ]);
+})->middleware(['auth'])->name('dashboard');
 
 // Student routes
-Route::get('/students', [StudentController::class, 'index'])->name('students.index');
-Route::get('/students/create', [StudentController::class, 'create'])->name('students.create');
-Route::post('/students', [StudentController::class, 'store'])->name('students.store');
-Route::get('/students/{student}/edit', [StudentController::class, 'edit'])->name('students.edit');
-Route::put('/students/{student}', [StudentController::class, 'update'])->name('students.update');
-Route::delete('/students/{student}', [StudentController::class, 'destroy'])->name('students.destroy');
-Route::post('/students/import', [StudentController::class, 'import'])->name('students.import'); // Import students info using excel
+Route::prefix('students')->group(function () {
+    Route::get('/', [StudentController::class, 'index'])->name('students.index');
+    Route::get('/profile', [StudentController::class, 'profile'])->name('student.profile');
+    Route::get('/create', [StudentController::class, 'create'])->name('students.create');
+    Route::post('/', [StudentController::class, 'store'])->name('students.store');
+    Route::get('/{student}/edit', [StudentController::class, 'edit'])->name('students.edit');
+    Route::put('/{student}', [StudentController::class, 'update'])->name('students.update');
+    Route::delete('/{student}', [StudentController::class, 'destroy'])->name('students.destroy');
+    Route::post('/import', [StudentController::class, 'import'])->name('students.import'); // Import students info using excel
+});
 
 // Intern routes
-Route::middleware(['auth'])->group(function () {
+Route::middleware('auth')->group(function () {
     Route::get('/intern-profile', [InternController::class, 'index'])->name('intern.profile');
-    Route::get('/intern-profile/create', [InternController::class, 'create'])->name('intern.create');
-    Route::post('/intern-profile', [InternController::class, 'store'])->name('intern.store');
-    Route::get('/intern-profile/{id}/edit', [InternController::class, 'edit'])->name('intern.edit');
-    Route::put('/intern-profile/{id}', [InternController::class, 'update'])->name('intern.update');
-    Route::delete('/intern-profile/{id}', [InternController::class, 'destroy'])->name('intern.destroy');
+    Route::get('/intern-profile/{intern}/edit', [InternController::class, 'edit'])->name('intern.edit');
+    Route::put('/intern-profile/{intern}', [InternController::class, 'update'])->name('intern.update');
+    Route::delete('/intern-profile/{intern}', [InternController::class, 'destroy'])->name('intern.destroy');
     
     // Profile routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -66,6 +87,19 @@ Route::put('/derogatory_records/{id}', [DerogatoryRecordController::class, 'upda
 
 // Route to handle deleting a derogatory record
 Route::delete('/derogatory_records/{id}', [DerogatoryRecordController::class, 'destroy'])->name('derogatory_records.destroy');
+
+// Add this new route for status updates
+Route::patch('/intern-profile/{intern}/status', [InternController::class, 'updateStatus'])
+    ->name('intern.update.status');
+
+Route::post('/interns/{intern}/upload-document', [InternController::class, 'uploadDocument'])
+    ->name('interns.upload-document');
+
+// Add this route if it doesn't exist
+Route::get('/interns', [InternController::class, 'index'])->name('intern.index');
+Route::get('/interns/{student_number}/edit', [InternController::class, 'edit'])->name('intern.edit');
+Route::put('/interns/{student_number}', [InternController::class, 'update'])->name('intern.update');
+Route::delete('/interns/{student_number}', [InternController::class, 'destroy'])->name('intern.destroy');
 
 });
 

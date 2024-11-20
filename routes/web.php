@@ -6,26 +6,47 @@ use App\Http\Controllers\OjtRecordsController;
 use App\Http\Controllers\CoordinatorController;
 use App\Http\Controllers\InternController;
 use App\Http\Controllers\DerogatoryRecordController;
+use App\Http\Controllers\LoginController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 // Redirect root URL to /login
 Route::get('/', function () {
     return redirect('/login');
 });
 
+// Login routes
+Route::get('/login', function () {
+    // Redirect to dashboard if already logged in
+    if (Auth::check()) {
+        return redirect('/dashboard');
+    }
+    return view('login');
+})->name('login');
+
+Route::post('/login', [LoginController::class, 'login'])->name('login.post');
+
 // Dashboard route
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    return view('dashboard', [
+        'totalStudents' => \App\Models\Student::count(),
+        'totalDerogatory' => \App\Models\DerogatoryRecord::count(),
+        'totalInterns' => \App\Models\Intern::count(),
+        'totalOJT' => \App\Models\OJTRecord::count(),
+    ]);
 })->middleware(['auth'])->name('dashboard');
 
 // Student routes
-Route::get('/students', [StudentController::class, 'index'])->name('students.index');
-Route::get('/students/create', [StudentController::class, 'create'])->name('students.create');
-Route::post('/students', [StudentController::class, 'store'])->name('students.store');
-Route::get('/students/{student}/edit', [StudentController::class, 'edit'])->name('students.edit');
-Route::put('/students/{student}', [StudentController::class, 'update'])->name('students.update');
-Route::delete('/students/{student}', [StudentController::class, 'destroy'])->name('students.destroy');
-Route::post('/students/import', [StudentController::class, 'import'])->name('students.import'); // Import students info using excel
+Route::prefix('students')->group(function () {
+    Route::get('/', [StudentController::class, 'index'])->name('students.index');
+    Route::get('/profile', [StudentController::class, 'profile'])->name('student.profile');
+    Route::get('/create', [StudentController::class, 'create'])->name('students.create');
+    Route::post('/', [StudentController::class, 'store'])->name('students.store');
+    Route::get('/{student}/edit', [StudentController::class, 'edit'])->name('students.edit');
+    Route::put('/{student}', [StudentController::class, 'update'])->name('students.update');
+    Route::delete('/{student}', [StudentController::class, 'destroy'])->name('students.destroy');
+    Route::post('/import', [StudentController::class, 'import'])->name('students.import'); // Import students info using excel
+});
 
 // Intern routes
 Route::middleware('auth')->group(function () {

@@ -14,7 +14,9 @@ Route::get('/', function () {
 });
 
 // Dashboard route
-Route::get('/dashboard', [StudentController::class, 'index'])->name('student.profile');
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth'])->name('dashboard');
 
 // Student routes
 Route::get('/students', [StudentController::class, 'index'])->name('students.index');
@@ -73,7 +75,10 @@ Route::post('/interns/{intern}/upload-document', [InternController::class, 'uplo
     ->name('interns.upload-document');
 
 // Add this route if it doesn't exist
-Route::get('/interns', [InternController::class, 'index'])->name('intern.profile');
+Route::get('/interns', [InternController::class, 'index'])->name('intern.index');
+Route::get('/interns/{student_number}/edit', [InternController::class, 'edit'])->name('intern.edit');
+Route::put('/interns/{student_number}', [InternController::class, 'update'])->name('intern.update');
+Route::delete('/interns/{student_number}', [InternController::class, 'destroy'])->name('intern.destroy');
 
 });
 

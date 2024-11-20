@@ -141,8 +141,7 @@ class StudentController extends Controller
             'new_year_level' => $validated['year_level']
         ]);
 
-        return redirect()->route('student.profile')
-            ->with('success', 'Student updated successfully');
+        return redirect()->route('students.index')->with('success', 'Student updated successfully.');
     }    
 
     public function destroy(Student $student)

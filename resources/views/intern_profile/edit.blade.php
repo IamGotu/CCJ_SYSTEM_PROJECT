@@ -9,7 +9,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <form method="POST" action="{{ route('intern.update', ['intern' => $intern->id]) }}">
+                    <form method="POST" action="{{ route('intern.update', $intern->student_number) }}">
                         @csrf
                         @method('PUT')
 
@@ -28,7 +28,7 @@
                             <input type="text" 
                                    name="roster_number" 
                                    id="roster_number" 
-                                   value="{{ old('roster_number', $intern->roster_number) }}"
+                                   value="{{ old('roster_number', $intern->roster_number ?? '') }}"
                                    class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 shadow-sm">
                         </div>
 
@@ -45,7 +45,6 @@
                                         'Court Clearance',
                                         'Medical Certificate'
                                     ];
-                                    $currentDocs = isset($currentDocuments) ? $currentDocuments : [];
                                 @endphp
 
                                 @foreach($documentsList as $doc)
@@ -54,7 +53,7 @@
                                             <input type="checkbox" 
                                                    name="documents[]" 
                                                    value="{{ $doc }}"
-                                                   {{ in_array($doc, $currentDocs) ? 'checked' : '' }}
+                                                   {{ in_array($doc, $currentDocuments) ? 'checked' : '' }}
                                                    class="rounded border-gray-300 dark:border-gray-600 text-indigo-600 shadow-sm">
                                             <span class="ml-2">{{ $doc }}</span>
                                         </label>
@@ -68,7 +67,7 @@
                             <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
                                 UPDATE
                             </button>
-                            <a href="{{ route('intern.profile') }}" class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600">
+                            <a href="{{ route('intern.index') }}" class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600">
                                 CANCEL
                             </a>
                         </div>

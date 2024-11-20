@@ -5,28 +5,52 @@ namespace App\Http\Controllers;
 use App\Models\Intern;
 use App\Models\Student;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class InternController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Intern::query();
+        $query = DB::table('students')
+            ->select(
+                'student_id_number as student_number',
+                'last_name',
+                'first_name',
+                'middle_name',
+                'year_level',
+                'roster_number',
+                'documents',
+                DB::raw("CASE 
+                    WHEN year_level = 'GRADUATE' THEN 'Graduated'
+                    ELSE 'Active'
+                    END as status")
+            )
+            ->where(function($q) {
+                $q->where('year_level', '4TH')
+                  ->orWhere('year_level', 'GRADUATE');
+            });
 
-        // Apply search filter if search term exists
+        // Handle search
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function($q) use ($search) {
-                $q->where('student_number', 'like', '%' . $search . '%')
-                  ->orWhere('first_name', 'like', '%' . $search . '%')
-                  ->orWhere('last_name', 'like', '%' . $search . '%');
+                $q->where('student_id_number', 'LIKE', "%{$search}%")
+                  ->orWhere('first_name', 'LIKE', "%{$search}%")
+                  ->orWhere('last_name', 'LIKE', "%{$search}%")
+                  ->orWhere('middle_name', 'LIKE', "%{$search}%");
             });
         }
 
-        // Always filter for active 3rd and 4th year students
-        $interns = $query->where('status', 'active')
-                        ->whereIn('year_level', ['3RD', '4TH'])
-                        ->orderBy('student_number')
-                        ->get();
+        // Handle filter
+        if ($request->filled('filter') && $request->filter !== 'all') {
+            if ($request->filter === 'graduated') {
+                $query->where('year_level', 'GRADUATE');
+            } elseif ($request->filter === '4th') {
+                $query->where('year_level', '4TH');
+            }
+        }
+
+        $interns = $query->get();
 
         return view('intern_profile.index', compact('interns'));
     }
@@ -57,65 +81,67 @@ class InternController extends Controller
             ->with('success', 'Intern created successfully.');
     }
 
-    public function edit(Intern $intern)
+    public function edit($student_number)
     {
-        // Remove quotes when displaying in edit form
-        $currentDocuments = $intern->documents;
-        if ($currentDocuments && $currentDocuments !== 'No documents') {
-            $currentDocuments = trim($currentDocuments, '"');
-            $currentDocuments = explode(', ', $currentDocuments);
-        } else {
-            $currentDocuments = [];
+        $intern = DB::table('students')
+            ->select(
+                'id',
+                'student_id_number as student_number',
+                'first_name',
+                'middle_name',
+                'last_name',
+                'year_level',
+                'roster_number',
+                'documents'
+            )
+            ->where('student_id_number', $student_number)
+            ->first();
+
+        if (!$intern) {
+            return redirect()->route('intern.index')
+                ->with('error', 'Intern not found');
         }
 
-        return view('intern_profile.edit', compact('intern', 'currentDocuments'));
+        // Initialize empty documents array if null
+        $currentDocuments = [];
+        if ($intern->documents) {
+            $currentDocuments = json_decode($intern->documents, true) ?? [];
+        }
+
+        return view('intern_profile.edit', [
+            'intern' => $intern,
+            'currentDocuments' => $currentDocuments
+        ]);
     }
 
-    public function update(Request $request, Intern $intern)
+    public function update(Request $request, $student_number)
     {
-        $validated = $request->validate([
-            'roster_number' => 'required|string|max:255',
+        $request->validate([
+            'roster_number' => 'nullable|string|max:255',
             'documents' => 'nullable|array'
         ]);
 
-        try {
-            // Properly quote the documents string
-            $selectedDocuments = $request->input('documents', []);
-            $documentsString = !empty($selectedDocuments) 
-                ? '"' . implode(', ', $selectedDocuments) . '"'  // Add quotes around the string
-                : 'No documents';
+        $updateData = [
+            'roster_number' => $request->roster_number,
+            'documents' => $request->has('documents') ? json_encode($request->documents) : null
+        ];
 
-            $intern->update([
-                'roster_number' => $validated['roster_number'],
-                'documents' => $documentsString
-            ]);
+        DB::table('students')
+            ->where('student_id_number', $student_number)
+            ->update($updateData);
 
-            \Log::info('Documents updated:', [
-                'intern_id' => $intern->id,
-                'documents' => $documentsString
-            ]);
-
-            return redirect()->route('intern.profile')
-                ->with('success', 'Intern updated successfully');
-        } catch (\Exception $e) {
-            \Log::error('Update error:', [
-                'message' => $e->getMessage(),
-                'intern_id' => $intern->id
-            ]);
-
-            return back()
-                ->withInput()
-                ->with('error', 'Failed to update documents. Please try again.');
-        }
+        return redirect()->route('intern.index')
+            ->with('success', 'Intern information updated successfully');
     }
 
-    public function destroy($id)
+    public function destroy($student_number)
     {
-        $intern = Intern::findOrFail($id);
-        $intern->delete();
-        
-        return redirect()->route('intern.profile')
-            ->with('success', 'Student record deleted successfully');
+        DB::table('students')
+            ->where('student_id_number', $student_number)
+            ->delete();
+
+        return redirect()->route('intern.index')
+            ->with('success', 'Intern deleted successfully');
     }
 
     public function updateStatus(Intern $intern)
@@ -158,5 +184,21 @@ class InternController extends Controller
         }
 
         return redirect()->back()->with('error', 'No document was uploaded');
+    }
+
+    public function updated(Student $student)
+    {
+        // If the student is or was a 4th year student
+        if ($student->year_level === 'GRADUATE' || $student->getOriginal('year_level') === '4TH') {
+            Intern::updateOrCreate(
+                ['student_number' => $student->student_number],
+                [
+                    'year_level' => $student->year_level,
+                    'first_name' => $student->first_name,
+                    'last_name' => $student->last_name,
+                    // ... other fields ...
+                ]
+            );
+        }
     }
 } 

@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Interns Profile') }}
+            {{ __('Student Profiles') }}
         </h2>
     </x-slot>
 
@@ -9,23 +9,38 @@
         <div class="max-w mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-4 space-y-2 sm:space-y-0">
                 <!-- Search and Filter Section -->
-                <div class="flex items-center space-x-4">
-                    <div class="search-container">
-                        <form action="{{ route('intern.profile') }}" method="GET" class="search-form">
-                            <div class="search-wrapper">
-                                <input 
-                                    type="text" 
-                                    name="search" 
-                                    placeholder="Search by student number or name" 
-                                    value="{{ request('search') }}"
-                                    class="search-input animate"
-                                >
-                                <button type="submit" class="search-button animate">Search</button>
-                            </div>
-                            <a href="{{ route('intern.profile') }}" class="show-all-btn animate">Show All Interns</a>
-                        </form>
-                    </div>
-                </div>
+                <form action="{{ route('intern.index') }}" method="GET" class="flex items-center gap-4">
+                    <input 
+                        type="text" 
+                        name="search" 
+                        class="search-input px-4 py-2 rounded-md dark:bg-gray-700"
+                        placeholder="Search by student number or name"
+                        value="{{ request('search') }}"
+                    >
+                    
+                    <select 
+                        name="filter" 
+                        class="px-4 py-2 rounded-md dark:bg-gray-700"
+                    >
+                        <option value="all" {{ request('filter') == 'all' ? 'selected' : '' }}>All</option>
+                        <option value="4th" {{ request('filter') == '4th' ? 'selected' : '' }}>4th Year</option>
+                        <option value="graduated" {{ request('filter') == 'graduated' ? 'selected' : '' }}>Graduated</option>
+                    </select>
+
+                    <button 
+                        type="submit" 
+                        class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                    >
+                        Search
+                    </button>
+
+                    <a 
+                        href="{{ route('intern.index') }}" 
+                        class="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600"
+                    >
+                        Show All Eligible Interns
+                    </a>
+                </form>
             </div>
 
             <!-- Table Section -->
@@ -52,27 +67,47 @@
                                 <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-200">{{ $intern->first_name }}</td>
                                 <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-200">{{ $intern->middle_name }}</td>
                                 <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-200">{{ $intern->year_level }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-200">{{ $intern->roster_number }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-200">
+                                    {{ $intern->roster_number ?? 'Not Assigned' }}
+                                </td>
                                 <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-200">
                                     @if($intern->documents)
-                                        {{ trim($intern->documents, '"') }}
+                                        @php
+                                            $documents = json_decode($intern->documents, true);
+                                        @endphp
+                                        @if(is_array($documents) && count($documents) > 0)
+                                            <div class="flex flex-col gap-1">
+                                                @foreach($documents as $document)
+                                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-100">
+                                                        {{ $document }}
+                                                    </span>
+                                                @endforeach
+                                            </div>
+                                        @else
+                                            <span class="text-gray-500 dark:text-gray-400">No documents</span>
+                                        @endif
                                     @else
-                                        No documents
+                                        <span class="text-gray-500 dark:text-gray-400">No documents</span>
                                     @endif
                                 </td>
                                 <td class="px-6 py-4 text-sm">
-                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                        Active
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $intern->year_level === 'GRADUATE' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800' }}">
+                                        {{ $intern->status }}
                                     </span>
                                 </td>
                                 <td class="px-6 py-4 text-sm font-medium text-right">
-                                    <a href="{{ route('intern.edit', $intern->id) }}" class="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300 mr-3">
+                                    <a href="{{ route('intern.edit', $intern->student_number) }}" 
+                                       class="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300 mr-3">
                                         Edit
                                     </a>
-                                    <form action="{{ route('intern.destroy', $intern->id) }}" method="POST" class="inline-block">
+                                    <form action="{{ route('intern.destroy', $intern->student_number) }}" 
+                                          method="POST" 
+                                          class="inline-block">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300" onclick="return confirm('Are you sure you want to delete this record?')">
+                                        <button type="submit" 
+                                                class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300" 
+                                                onclick="return confirm('Are you sure you want to delete this record?')">
                                             Delete
                                         </button>
                                     </form>

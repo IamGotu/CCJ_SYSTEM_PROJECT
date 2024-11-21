@@ -6,13 +6,22 @@ use App\Models\Student;
 use App\Imports\StudentsImport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
-use App\Models\Intern;
-
 class StudentController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Student::query();
+/*************  ✨ Codeium Command ⭐  *************/
+    /**
+     * Display a listing of students filtered by search term and year level.
+     *
+     * This method retrieves students from the database based on optional search
+     * and year level filters provided in the request. The results are sorted
+     * by student ID number and passed to the 'student_profile.index' view.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\View\View
+     */
+/******  421bdfe4-86e6-47f0-8760-1e7f254e2553  *******/        $query = Student::query();
     
         // Filter by search term and year level if provided
         if ($request->has('search') && $request->search != '') {
@@ -29,7 +38,14 @@ class StudentController extends Controller
         $students = $query->orderBy('student_id_number')->get();
     
         return view('student_profile.index', compact('students'));
-    }    
+    }
+
+    public function show($id)
+    {
+        $student = Student::findOrFail($id);
+        return view('student_profile.view-profile', compact('student'));
+    }
+
     
     public function create()
     {
@@ -70,6 +86,7 @@ class StudentController extends Controller
             'father_contact' => 'nullable',
             'mother_contact' => 'nullable',
             'guardian_contact' => 'nullable',
+            'school_year' => 'nullable',
             'year_level' => 'required',
             'graduation_date' => 'nullable|date',
         ]);
@@ -86,8 +103,8 @@ class StudentController extends Controller
 
     public function update(Request $request, Student $student)
     {
-        $validated = $request->validate([
-            'year_level' => 'required|string',
+        // Validate the incoming request data
+        $validatedData = $request->validate([
             'student_id_number' => 'required|string|max:255',
             'first_name' => 'required|string|max:255',
             'middle_name' => 'nullable|string|max:255',
@@ -108,40 +125,16 @@ class StudentController extends Controller
             'father_contact' => 'nullable|string|max:255',
             'mother_contact' => 'nullable|string|max:255',
             'guardian_contact' => 'nullable|string|max:255',
+            'school_year' => 'nullable|string|max:255',
+            'year_level' => 'required|string',
             'graduation_date' => 'nullable|date',
         ]);
-
-        // Update student record
-        $student->update($validated);
-
-        // Sync with interns table
-        if (in_array($validated['year_level'], ['3RD', '4TH'])) {
-            // Update or create intern record
-            Intern::updateOrCreate(
-                ['student_number' => $validated['student_id_number']],
-                [
-                    'first_name' => $student->first_name,
-                    'middle_name' => $student->middle_name,
-                    'last_name' => $student->last_name,
-                    'year_level' => $validated['year_level'], // Use the new year level
-                    'guardian' => $student->guardian_name ?? 'Not Specified',
-                    'guardian_contact' => $student->guardian_contact ?? 'Not Specified',
-                    'status' => 'active'
-                ]
-            );
-        } else {
-            // If not 3rd or 4th year, remove from interns
-            Intern::where('student_number', $validated['student_id_number'])->delete();
-        }
-
-        // Add debugging
-        \Log::info('Student Update:', [
-            'student_id' => $validated['student_id_number'],
-            'old_year_level' => $student->getOriginal('year_level'),
-            'new_year_level' => $validated['year_level']
-        ]);
-
-        return redirect()->route('students.index')->with('success', 'Student updated successfully.');
+    
+        // Update the student record
+        $student->update($validatedData);
+    
+        // Redirect back with a success message
+        return redirect()->route('students.index')->with('success', 'Student profile updated successfully.');
     }    
 
     public function destroy(Student $student)

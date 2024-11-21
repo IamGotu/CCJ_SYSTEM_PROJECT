@@ -39,13 +39,13 @@ Route::get('/dashboard', function () {
 // Student routes
 Route::prefix('students')->group(function () {
     Route::get('/', [StudentController::class, 'index'])->name('students.index');
-    Route::get('/profile', [StudentController::class, 'profile'])->name('student.profile');
-    Route::get('/create', [StudentController::class, 'create'])->name('students.create');
-    Route::post('/', [StudentController::class, 'store'])->name('students.store');
-    Route::get('/{student}/edit', [StudentController::class, 'edit'])->name('students.edit');
-    Route::put('/{student}', [StudentController::class, 'update'])->name('students.update');
-    Route::delete('/{student}', [StudentController::class, 'destroy'])->name('students.destroy');
-    Route::post('/import', [StudentController::class, 'import'])->name('students.import'); // Import students info using excel
+    Route::get('/students/create', [StudentController::class, 'create'])->name('students.create');
+    Route::post('/students', [StudentController::class, 'store'])->name('students.store');
+    Route::get('/students/{student}/edit', [StudentController::class, 'edit'])->name('students.edit');
+    Route::put('/students/{student}', [StudentController::class, 'update'])->name('students.update');
+    Route::delete('/students/{student}', [StudentController::class, 'destroy'])->name('students.destroy');
+    Route::post('/students/import', [StudentController::class, 'import'])->name('students.import');
+    Route::get('/students/{student}', [StudentController::class, 'show'])->name('students.show');
 });
 
 // Intern routes

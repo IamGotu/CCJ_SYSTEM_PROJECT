@@ -10,11 +10,6 @@
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-4 space-y-2 sm:space-y-0">
 
                 <div class="flex items-center space-x-2">
-                    <!-- Add Student Button -->
-                    <a href="{{ route('students.create') }}" class="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition duration-200">
-                        Add Student
-                    </a>
-                    
                     <!-- Import Students Button -->
                     <form action="{{ route('students.import') }}" method="POST" enctype="multipart/form-data" class="flex items-center">
                         @csrf
@@ -43,7 +38,6 @@
                             <option value="4TH" {{ request('year_level') == '4TH' ? 'selected' : '' }}>4TH</option>
                             <option value="GRADUATE" {{ request('year_level') == 'GRADUATE' ? 'selected' : '' }}>GRADUATE</option>
                         </select>
-
                         <!-- Search Button -->
                         <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-200">
                             Search
@@ -65,11 +59,8 @@
                     <tr>
                         <th class="py-6 px-4 text-center">Student ID Number</th>
                         <th class="py-6 px-4 text-center">Name</th>
-                        <th class="py-6 px-4 text-center">Birthdate</th>
-                        <th class="py-6 px-4 text-center">Address</th>
                         <th class="py-6 px-4 text-center">Contact Number</th>
-                        <th class="py-6 px-4 text-center">Guardian</th>
-                        <th class="py-6 px-4 text-center">Guardian Contact</th>
+                        <th class="py-6 px-4 text-center">School Year</th>
                         <th class="py-6 px-4 text-center">Year Level</th>
                         <th class="py-6 px-4 text-center">Graduation Date</th>
                         <th class="py-6 px-4 text-center">Action</th>
@@ -77,24 +68,13 @@
                 </thead>
                 <tbody class="text-gray-600 dark:text-gray-400 text-sm font-light">
                     @forelse ($students as $student)
-                        <tr class="border-b border-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-200">
+                        <tr onclick="window.location='{{ route('students.show', $student->id) }}'" class="border-b border-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-200">
                             <td class="py-6 px-4 text-center">{{ $student->student_id_number }}</td>
                             <td class="py-6 px-4 text-center">{{ $student->first_name }} {{ $student->middle_name }} {{ $student->last_name }} {{ $student->suffix }}</td>
-                            <td class="py-6 px-4 text-center">{{ $student->birthdate->format('Y-m-d') }}</td>
-                            <td class="py-6 px-4 text-center">{{ $student->purok }} {{ $student->street_num }} {{ $student->street_name }} {{ $student->barangay }} {{ $student->city }} {{ $student->state }}</td>
                             <td class="py-6 px-4 text-center">{{ $student->contact_number ?? 'N/A' }}</td>
 
-                            <!-- Guardian Name Logic -->
-                            <td class="py-6 px-4 text-center">
-                                {{ implode(' and ', array_filter([$student->father_name, $student->mother_name])) ?: $student->guardian_name }}
-                            </td>
-
-                            <!-- Guardian Contact Logic -->
-                            <td class="py-6 px-4 text-center">
-                                {{ implode(' and ', array_filter([$student->father_contact, $student->mother_contact])) ?: $student->guardian_contact }}
-                            </td>
-
-                            <!-- Year Level -->
+                            <!-- Standing -->
+                             <td class="py-6 px-4 text-center">{{ $student->school_year }}</td>
                             <td class="py-2 px-4 text-center">{{ $student->year_level }}</td>
                             <td class="py-2 px-4 text-center">{{ $student->graduation_date ? $student->graduation_date->format('Y-m-d') : 'N/A' }}</td>
                             <td class="py-2 px-4 text-center">

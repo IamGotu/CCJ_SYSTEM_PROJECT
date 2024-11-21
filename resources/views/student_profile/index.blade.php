@@ -93,7 +93,7 @@
 
                     <!-- No results found message inside the table -->
                     <tr id="noResults" class="hidden">
-                        <td colspan="8" class="py-4 px-6 text-center text-red-500">No results found</td>
+                        <td colspan="8" class="py-4 px-6 text-center text-gray-500 dark:text-gray-400">No results found</td>
                     </tr>
                 </tbody>
             </table>

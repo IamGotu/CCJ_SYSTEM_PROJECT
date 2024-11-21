@@ -30,18 +30,14 @@
                             value="{{ request('search') }}">
 
                         <!-- Year Level Filter Dropdown -->
-                        <select name="year_level" class="p-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-gray-200 w-full sm:w-auto">
-                            <option value="">Filter by Year Level</option>
+                        <select name="year_level" class="p-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-gray-200 w-full sm:w-auto" id="yearLevelSelect" onchange="this.form.submit()">
+                            <option value="">All Year Level</option>
                             <option value="1ST" {{ request('year_level') == '1ST' ? 'selected' : '' }}>1ST</option>
                             <option value="2ND" {{ request('year_level') == '2ND' ? 'selected' : '' }}>2ND</option>
                             <option value="3RD" {{ request('year_level') == '3RD' ? 'selected' : '' }}>3RD</option>
                             <option value="4TH" {{ request('year_level') == '4TH' ? 'selected' : '' }}>4TH</option>
                             <option value="GRADUATE" {{ request('year_level') == 'GRADUATE' ? 'selected' : '' }}>GRADUATE</option>
                         </select>
-                        <!-- Search Button -->
-                        <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-200">
-                            Search
-                        </button>
                     </form>
 
                     <!-- Refresh Button -->

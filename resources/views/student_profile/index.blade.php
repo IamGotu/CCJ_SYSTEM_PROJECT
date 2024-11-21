@@ -20,32 +20,35 @@
                     </form>
                 </div>
 
-                <!-- Search Form and Filter Container -->
-                <div class="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-2 w-full sm:w-auto">
+<!-- Search Form and Filter Container -->
+<div class="flex flex-col sm:flex-row sm:space-x-4 items-center w-full sm:w-1/2 ">
 
-                    <!-- Search Input for Real-Time Search -->
-                    <div class="flex space-x-2 w-full sm:w-1/2 lg:w-1/3">
-                        <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Search by student initials or student number..."
-                            class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
-                    </div>
+    <!-- Search Input for Real-Time Search -->
+    <div class="flex space-x-2 w-full sm:w-3/4 lg:w-3/4">
+        <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Search by Student Number or Name"
+            class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+    </div>
 
-                    <!-- Year Level Filter Dropdown -->
-                    <form method="GET" action="{{ route('students.index') }}" class="flex flex-col sm:flex-row sm:space-x-2 w-full sm:w-auto">
-                        <select name="year_level" class="p-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-gray-200 w-full sm:w-auto" id="yearLevelSelect" onchange="this.form.submit()">
-                            <option value="">All Year Level</option>
-                            <option value="1ST" {{ request('year_level') == '1ST' ? 'selected' : '' }}>1ST</option>
-                            <option value="2ND" {{ request('year_level') == '2ND' ? 'selected' : '' }}>2ND</option>
-                            <option value="3RD" {{ request('year_level') == '3RD' ? 'selected' : '' }}>3RD</option>
-                            <option value="4TH" {{ request('year_level') == '4TH' ? 'selected' : '' }}>4TH</option>
-                            <option value="GRADUATE" {{ request('year_level') == 'GRADUATE' ? 'selected' : '' }}>GRADUATE</option>
-                        </select>
-                    </form>
+    <!-- Year Level Filter Dropdown -->
+    <form method="GET" action="{{ route('students.index') }}" class="flex w-full sm:w-auto mt-2 sm:mt-0">
+        <select name="year_level" class="p-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-gray-200 w-full sm:w-auto" id="yearLevelSelect" onchange="this.form.submit()">
+            <option value="">All Year Level</option>
+            <option value="1ST" {{ request('year_level') == '1ST' ? 'selected' : '' }}>1ST</option>
+            <option value="2ND" {{ request('year_level') == '2ND' ? 'selected' : '' }}>2ND</option>
+            <option value="3RD" {{ request('year_level') == '3RD' ? 'selected' : '' }}>3RD</option>
+            <option value="4TH" {{ request('year_level') == '4TH' ? 'selected' : '' }}>4TH</option>
+            <option value="GRADUATE" {{ request('year_level') == 'GRADUATE' ? 'selected' : '' }}>GRADUATE</option>
+        </select>
+    </form>
 
-                    <!-- Refresh Button -->
-                    <a href="{{ route('students.index') }}" class="bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600 transition duration-200 sm:ml-2">
-                        Refresh
-                    </a>
-                </div>
+    <!-- Refresh Button -->
+    <a href="{{ route('students.index') }}" class="bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600 transition duration-200 w-full sm:w-auto mt-2 sm:mt-0">
+        Refresh
+    </a>
+</div>
+
+
+
             </div>
         </div>
 

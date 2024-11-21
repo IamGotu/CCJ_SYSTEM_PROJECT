@@ -10,18 +10,7 @@ class StudentController extends Controller
 {
     public function index(Request $request)
     {
-/*************  ✨ Codeium Command ⭐  *************/
-    /**
-     * Display a listing of students filtered by search term and year level.
-     *
-     * This method retrieves students from the database based on optional search
-     * and year level filters provided in the request. The results are sorted
-     * by student ID number and passed to the 'student_profile.index' view.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\View\View
-     */
-/******  421bdfe4-86e6-47f0-8760-1e7f254e2553  *******/        $query = Student::query();
+        $query = Student::query();
     
         // Filter by search term and year level if provided
         if ($request->has('search') && $request->search != '') {

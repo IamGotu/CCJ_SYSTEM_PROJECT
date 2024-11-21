@@ -101,9 +101,10 @@
     </div>
 
     <script>
-        // Real-Time Search Functionality
+        // Real-Time Search and Filter Functionality
         function filterTable() {
             const query = document.getElementById('searchInput').value.toLowerCase(); // Get the search query
+            const yearLevel = document.getElementById('yearLevelSelect').value.toLowerCase(); // Get the selected year level
             const rows = document.querySelectorAll('#studentsTableBody tr'); // Get all rows of the table body
             const noResultsMessage = document.getElementById('noResults'); // Get the 'No results found' row
             let noResultsFound = true;
@@ -114,6 +115,7 @@
 
                 const cells = row.getElementsByTagName('td'); // Get cells of the row
                 let matchFound = false;
+                let yearMatch = false;
 
                 // Loop through each cell in the row to check if it matches the search query
                 for (let i = 0; i < cells.length; i++) {
@@ -123,8 +125,15 @@
                     }
                 }
 
-                // Show or hide the row based on whether a match was found
-                if (matchFound) {
+                // Check for Year Level filter match (if any year level is selected)
+                if (yearLevel && !row.querySelector('td:nth-child(6)').textContent.toLowerCase().includes(yearLevel)) {
+                    yearMatch = false;
+                } else {
+                    yearMatch = true;
+                }
+
+                // Show or hide the row based on whether both search and year level match
+                if (matchFound && yearMatch) {
                     row.style.display = ''; // Show row
                     noResultsFound = false;
                 } else {

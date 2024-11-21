@@ -22,14 +22,15 @@
 
                 <!-- Search Form and Filter Container -->
                 <div class="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-2 w-full sm:w-auto">
-                    <!-- Search Form -->
-                    <form method="GET" action="{{ route('students.index') }}" class="flex flex-col sm:flex-row sm:space-x-2 w-full sm:w-auto">
-                        <!-- Search Input -->
-                        <input type="text" name="search" placeholder="Search by name or ID"
-                            class="p-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-gray-200 w-full sm:w-60"
-                            value="{{ request('search') }}">
 
-                        <!-- Year Level Filter Dropdown -->
+                    <!-- Search Input for Real-Time Search -->
+                    <div class="flex space-x-2 w-full sm:w-1/2 lg:w-1/3">
+                        <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Search by student initials or student number..."
+                            class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+                    </div>
+
+                    <!-- Year Level Filter Dropdown -->
+                    <form method="GET" action="{{ route('students.index') }}" class="flex flex-col sm:flex-row sm:space-x-2 w-full sm:w-auto">
                         <select name="year_level" class="p-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-gray-200 w-full sm:w-auto" id="yearLevelSelect" onchange="this.form.submit()">
                             <option value="">All Year Level</option>
                             <option value="1ST" {{ request('year_level') == '1ST' ? 'selected' : '' }}>1ST</option>
@@ -50,7 +51,7 @@
 
         <!-- Adding overflow-x-auto for horizontal scroll on small screens -->
         <div class="overflow-x-auto mt-6 px-4 sm:px-6 lg:px-5">
-            <table class="min-w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600">
+            <table id="studentsTable" class="min-w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600">
                 <thead class="bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-300 text-xs font-medium uppercase tracking-wider">
                     <tr>
                         <th class="py-6 px-4 text-center">Student ID Number</th>
@@ -63,14 +64,12 @@
                         <th class="py-6 px-4 text-center">Action</th>
                     </tr>
                 </thead>
-                <tbody class="text-gray-600 dark:text-gray-400 text-sm font-light">
+                <tbody id="studentsTableBody" class="text-gray-600 dark:text-gray-400 text-sm font-light">
                     @forelse ($students as $student)
                         <tr onclick="window.location='{{ route('students.show', $student->id) }}'" class="border-b border-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-200">
                             <td class="py-6 px-4 text-center">{{ $student->student_id_number }}</td>
                             <td class="py-6 px-4 text-center">{{ $student->first_name }} {{ $student->middle_name }} {{ $student->last_name }} {{ $student->suffix }}</td>
                             <td class="py-6 px-4 text-center">{{ $student->contact_number ?? 'N/A' }}</td>
-
-                            <!-- Standing -->
                             <td class="py-6 px-4 text-center">{{ $student->enrollment_status }}</td>
                             <td class="py-6 px-4 text-center">{{ $student->school_year }}</td>
                             <td class="py-2 px-4 text-center">{{ $student->year_level }}</td>
@@ -86,13 +85,59 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="10" class="py-4 px-6 text-center text-gray-500 dark:text-gray-400">
+                            <td colspan="8" class="py-4 px-6 text-center text-gray-500 dark:text-gray-400">
                                 No records found
                             </td>
                         </tr>
                     @endforelse
+
+                    <!-- No results found message inside the table -->
+                    <tr id="noResults" class="hidden">
+                        <td colspan="8" class="py-4 px-6 text-center text-red-500">No results found</td>
+                    </tr>
                 </tbody>
             </table>
         </div> <!-- End overflow-x-auto -->
     </div>
+
+    <script>
+        // Real-Time Search Functionality
+        function filterTable() {
+            const query = document.getElementById('searchInput').value.toLowerCase(); // Get the search query
+            const rows = document.querySelectorAll('#studentsTableBody tr'); // Get all rows of the table body
+            const noResultsMessage = document.getElementById('noResults'); // Get the 'No results found' row
+            let noResultsFound = true;
+
+            rows.forEach(row => {
+                // Skip the 'No results found' row itself to avoid hiding it prematurely
+                if (row.id === 'noResults') return;
+
+                const cells = row.getElementsByTagName('td'); // Get cells of the row
+                let matchFound = false;
+
+                // Loop through each cell in the row to check if it matches the search query
+                for (let i = 0; i < cells.length; i++) {
+                    if (cells[i].textContent.toLowerCase().includes(query)) {
+                        matchFound = true;
+                        break;
+                    }
+                }
+
+                // Show or hide the row based on whether a match was found
+                if (matchFound) {
+                    row.style.display = ''; // Show row
+                    noResultsFound = false;
+                } else {
+                    row.style.display = 'none'; // Hide row
+                }
+            });
+
+            // Show or hide the 'No results found' message
+            if (noResultsFound) {
+                noResultsMessage.classList.remove('hidden');
+            } else {
+                noResultsMessage.classList.add('hidden');
+            }
+        }
+    </script>
 </x-app-layout>

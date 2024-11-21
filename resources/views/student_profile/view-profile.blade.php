@@ -41,7 +41,8 @@
             <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mt-6 mb-4 border-b-2 border-gray-300 pb-1">
                 Academic Information
             </h3>
-            <p><strong>School Year:</strong> {{ $student->school_year ?? 'N/A' }}</p>
+            <p><strong>Enrollment Status:</strong> {{ $student->enrollment_status ?? 'N/A' }}</p>
+            <p><strong>School Year:</strong> {{ $student->school_year }}</p>
             <p><strong>Year Level:</strong> {{ $student->year_level }}</p>
             <p><strong>Graduation Date:</strong> {{ $student->graduation_date ? $student->graduation_date->format('Y-m-d') : 'N/A' }}</p>
         </div>

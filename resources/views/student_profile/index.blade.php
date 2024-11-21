@@ -60,6 +60,7 @@
                         <th class="py-6 px-4 text-center">Student ID Number</th>
                         <th class="py-6 px-4 text-center">Name</th>
                         <th class="py-6 px-4 text-center">Contact Number</th>
+                        <th class="py-6 px-4 text-center">Enrollement Status</th>
                         <th class="py-6 px-4 text-center">School Year</th>
                         <th class="py-6 px-4 text-center">Year Level</th>
                         <th class="py-6 px-4 text-center">Graduation Date</th>
@@ -74,7 +75,8 @@
                             <td class="py-6 px-4 text-center">{{ $student->contact_number ?? 'N/A' }}</td>
 
                             <!-- Standing -->
-                             <td class="py-6 px-4 text-center">{{ $student->school_year }}</td>
+                            <td class="py-6 px-4 text-center">{{ $student->enrollment_status }}</td>
+                            <td class="py-6 px-4 text-center">{{ $student->school_year }}</td>
                             <td class="py-2 px-4 text-center">{{ $student->year_level }}</td>
                             <td class="py-2 px-4 text-center">{{ $student->graduation_date ? $student->graduation_date->format('Y-m-d') : 'N/A' }}</td>
                             <td class="py-2 px-4 text-center">

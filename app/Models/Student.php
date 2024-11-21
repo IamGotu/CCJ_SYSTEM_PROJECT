@@ -30,6 +30,8 @@ class Student extends Model
         'father_contact',
         'mother_contact',
         'guardian_contact',
+        'enrollment_status',
+        'school_year',
         'year_level',
         'graduation_date',
     ];

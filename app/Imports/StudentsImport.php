@@ -11,9 +11,15 @@ class StudentsImport implements ToModel, WithHeadingRow
 {
     public function model(array $row)
     {
-        // Parse the date fields and normalize them to Y-m-d format
-        $birthdate = $this->parseDate($row['birthdate']);
-        $graduationDate = $this->parseDate($row['graduation_date']);
+        // Ensure valid enrollment_status
+        $enrollmentStatus = $this->getValidEnrollmentStatus($row['enrollment_status']);
+        
+        // Ensure valid year_level
+        $yearLevel = $this->getValidYearLevel($row['year_level']);
+        
+        // Handle the birthdate and graduation_date
+        $birthdate = Carbon::createFromFormat('d/m/Y', $row['birthdate'])->format('Y-m-d');
+        $graduationDate = $row['graduation_date'] ? Carbon::createFromFormat('d/m/Y', $row['graduation_date'])->format('Y-m-d') : null;
 
         // Find the student by ID number or create a new one
         $student = Student::firstOrNew(['student_id_number' => $row['student_id_number']]);
@@ -37,7 +43,9 @@ class StudentsImport implements ToModel, WithHeadingRow
         $student->father_contact = $row['father_contact'];
         $student->mother_contact = $row['mother_contact'];
         $student->guardian_contact = $row['guardian_contact'];
-        $student->year_level = $row['year_level'];
+        $student->enrollment_status = $enrollmentStatus;
+        $student->school_year = $row['school_year'];
+        $student->year_level = $yearLevel;
         $student->graduation_date = $graduationDate;
 
         $student->save();
@@ -45,23 +53,21 @@ class StudentsImport implements ToModel, WithHeadingRow
     }
 
     /**
-     * Parse a date string into Y-m-d format.
-     *
-     * @param string|null $date
-     * @return string|null
+     * Validate enrollment status to ensure it's one of the acceptable values.
      */
-    private function parseDate($date)
+    private function getValidEnrollmentStatus($status)
     {
-        if (!$date) {
-            return null; // Return null if the date is empty
-        }
-
-        try {
-            // Try to parse the date and format it as Y-m-d
-            return Carbon::parse($date)->format('Y-m-d');
-        } catch (\Exception $e) {
-            // Handle parsing failure, optionally log the issue
-            return null;
-        }
+        $validStatuses = ['Enrolled', 'Not Enrolled', 'Graduate'];
+        return in_array($status, $validStatuses) ? $status : 'Not Enrolled'; // Default to 'Not Enrolled' if invalid
     }
+
+    /**
+     * Validate year level to ensure it's one of the acceptable values.
+     */
+    private function getValidYearLevel($yearLevel)
+    {
+        $validYearLevels = ['1ST', '2ND', '3RD', '4TH', 'GRADUATE'];
+        return in_array($yearLevel, $validYearLevels) ? $yearLevel : '1ST'; // Default to '1ST' if invalid
+    }
+
 }

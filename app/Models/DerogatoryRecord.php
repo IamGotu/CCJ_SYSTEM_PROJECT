@@ -23,7 +23,7 @@ class DerogatoryRecord extends Model
      * @var array
      */
     protected $fillable = [
-        'student_number',
+        'student_id_number',
         'last_name',
         'first_name',
         'middle_name',
@@ -32,8 +32,12 @@ class DerogatoryRecord extends Model
         'action_taken',
         'settled',
         'sanction',
+        'year_level',
+        'school_year',
+        'enrollment_status',
+        'graduation_date',
     ];
-
+    
     /**
      * The attributes that should be cast to native types.
      *

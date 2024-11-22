@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Events\StudentImported;
 use App\Models\Student;
 use App\Imports\StudentsImport;
 use Maatwebsite\Excel\Facades\Excel;
@@ -46,11 +46,21 @@ class StudentController extends Controller
         $request->validate([
             'file' => 'required|mimes:xlsx,xls,csv',
         ]);
-
+    
+        // Import student data
         Excel::import(new StudentsImport, $request->file('file'));
-
+    
+        // Fire the event after data is imported
+        // Get the latest student records from the database or use the imported data
+        $students = Student::all(); // You can adjust this to only get newly added students if needed
+    
+        foreach ($students as $student) {
+            event(new StudentImported($student));  // Fire the event for each imported student
+        }
+    
         return redirect()->route('students.index')->with('success', 'Student data imported successfully.');
     }
+    
     
     public function store(Request $request)
     {

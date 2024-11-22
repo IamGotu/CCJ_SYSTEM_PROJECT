@@ -47,5 +47,10 @@ class DerogatoryRecord extends Model
         'year_graduated' => 'integer',
         'settled' => 'boolean',
     ];
+    public function student()
+    {
+        return $this->belongsTo(Student::class, 'student_id_number', 'student_id_number');
+    }
+
 }
 

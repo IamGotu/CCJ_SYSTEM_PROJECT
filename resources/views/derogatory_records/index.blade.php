@@ -32,7 +32,10 @@
                         <th class="px-6 py-4 text-left">Last Name</th>
                         <th class="px-6 py-4 text-left">First Name</th>
                         <th class="px-6 py-4 text-left">Middle Name</th>
-                        <th class="px-6 py-4 text-left">Year Graduated</th>
+                        <th class="px-6 py-4 text-left">Year Level</th>
+                        <th class="px-6 py-4 text-left">School Year</th>
+                        <th class="px-6 py-4 text-left">Enrollment Status</th>
+                        <th class="px-6 py-4 text-left">Graduation Date</th>
                         <th class="px-6 py-4 text-left">Violation</th>
                         <th class="px-6 py-4 text-left">Action Taken</th>
                         <th class="px-6 py-4 text-left">Settled</th>
@@ -43,16 +46,19 @@
                 <tbody>
                     @if($derogatoryRecords->isEmpty())
                         <tr>
-                            <td colspan="10" class="px-6 py-4 text-center text-gray-500 dark:text-gray-300">No records found</td>
+                            <td colspan="13" class="px-6 py-4 text-center text-gray-500 dark:text-gray-300">No records found</td>
                         </tr>
                     @else
                         @foreach ($derogatoryRecords as $record)
                             <tr class="hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-300">
-                                <td class="px-6 py-4">{{ $record->student_number }}</td>
+                                <td class="px-6 py-4">{{ $record->student_id_number }}</td>
                                 <td class="px-6 py-4">{{ $record->last_name }}</td>
                                 <td class="px-6 py-4">{{ $record->first_name }}</td>
                                 <td class="px-6 py-4">{{ $record->middle_name }}</td>
-                                <td class="px-6 py-4">{{ $record->year_graduated }}</td>
+                                <td class="px-6 py-4">{{ $record->year_level }}</td>
+                                <td class="px-6 py-4">{{ $record->school_year }}</td>
+                                <td class="px-6 py-4">{{ $record->enrollment_status }}</td>
+                                <td class="px-6 py-4">{{ $record->graduation_date }}</td>
                                 <td class="px-6 py-4">{{ $record->violation }}</td>
                                 <td class="px-6 py-4">{{ $record->action_taken }}</td>
                                 <td class="px-6 py-4">{{ $record->settled }}</td>

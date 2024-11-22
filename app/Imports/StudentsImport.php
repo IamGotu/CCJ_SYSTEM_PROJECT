@@ -58,7 +58,7 @@ class StudentsImport implements ToModel, WithHeadingRow
     private function getValidEnrollmentStatus($status)
     {
         $validStatuses = ['Enrolled', 'Not Enrolled', 'Graduate'];
-        return in_array($status, $validStatuses) ? $status : 'Not Enrolled'; // Default to 'Not Enrolled' if invalid
+        return in_array($status, $validStatuses) ? $status : 'Invalid'; // Default to 'Not Enrolled' if invalid
     }
 
     /**
@@ -68,6 +68,29 @@ class StudentsImport implements ToModel, WithHeadingRow
     {
         $validYearLevels = ['1ST', '2ND', '3RD', '4TH', 'GRADUATE'];
         return in_array($yearLevel, $validYearLevels) ? $yearLevel : '1ST'; // Default to '1ST' if invalid
+    }
+    private function parseDate($date)
+    {
+        // Check if the date is a valid value
+        if (!$this->isValidDate($date)) {
+            Log::error("Invalid date format: " . $date);
+            return null;  // Return null or handle as needed
+        }
+
+        try {
+            return Carbon::createFromFormat('d/m/Y', $date)->format('Y-m-d');
+        } catch (\Exception $e) {
+            Log::error("Error parsing date: " . $date . " - " . $e->getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Validate if the date is in a correct format.
+     */
+    private function isValidDate($date)
+    {
+        return preg_match('/\d{2}\/\d{2}\/\d{4}/', $date);  // Matches d/m/Y format
     }
 
 }

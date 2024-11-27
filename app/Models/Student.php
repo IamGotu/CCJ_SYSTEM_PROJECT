@@ -72,5 +72,15 @@ class Student extends Model
                 Intern::where('student_number', $student->student_id_number)->delete();
             }
         });
+        
     }
+    public function derogatoryRecords()
+    {
+        return $this->hasMany(DerogatoryRecord::class, 'student_id_number', 'student_id_number');
+    }
+    public function complaints()
+    {
+        return $this->hasMany(Complaint::class, 'student_id_number', 'student_id_number');
+    }
+
 }

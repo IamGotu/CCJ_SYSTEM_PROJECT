@@ -30,8 +30,8 @@
                         <th class="px-6 py-4 text-left">Last Name</th>
                         <th class="px-6 py-4 text-left">First Name</th>
                         <th class="px-6 py-4 text-left">Year Level</th>
-                        <th class="px-6 py-4 text-left">Enrollment Status</th>
                         <th class="px-6 py-4 text-left">School Year</th>
+                        <th class="px-6 py-4 text-left">Enrollment Status</th>
                         <th class="px-6 py-4 text-left">Violation</th>
                         <th class="px-6 py-4 text-left">Action Taken</th>
                         <th class="px-6 py-4 text-left">Sanction</th>

@@ -14,7 +14,7 @@ class ModifyDerogatoryRecordsNullable extends Migration
             $table->string('first_name')->nullable()->change();
             $table->string('year_level')->nullable()->change();
             $table->string('school_year')->nullable()->change();
-            $table->enum('enrollment_status', ['enrolled', 'not_enrolled', 'graduate'])->nullable()->change();
+            $table->enum('enrollment_status', ['Enrolled', 'Not Enrolled', 'Graduate'])->nullable()->change();
             $table->string('violation')->nullable()->change();
             $table->string('action_taken')->nullable()->change();
             $table->enum('sanction', ['suspension', 'expulsion', 'verbal_warning', 'written_warning', 'others'])->nullable()->change();

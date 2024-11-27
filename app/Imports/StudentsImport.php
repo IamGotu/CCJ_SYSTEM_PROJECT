@@ -58,7 +58,7 @@ class StudentsImport implements ToModel, WithHeadingRow
     private function getValidEnrollmentStatus($status)
     {
         $validStatuses = ['Enrolled', 'Not Enrolled', 'Graduate'];
-        return in_array($status, $validStatuses) ? $status : 'Invalid'; // Default to 'Not Enrolled' if invalid
+        return in_array($status, $validStatuses) ? $status : 'Not Enrolled'; // Default to 'Not Enrolled' if invalid
     }
 
     /**

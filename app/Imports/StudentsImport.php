@@ -5,11 +5,22 @@ namespace App\Imports;
 use App\Models\Student;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Carbon\Carbon;
 
 class StudentsImport implements ToModel, WithHeadingRow
 {
     public function model(array $row)
     {
+        // Ensure valid enrollment_status
+        $enrollmentStatus = $this->getValidEnrollmentStatus($row['enrollment_status']);
+        
+        // Ensure valid year_level
+        $yearLevel = $this->getValidYearLevel($row['year_level']);
+        
+        // Handle the birthdate and graduation_date
+        $birthdate = Carbon::createFromFormat('d/m/Y', $row['birthdate'])->format('Y-m-d');
+        $graduationDate = $row['graduation_date'] ? Carbon::createFromFormat('d/m/Y', $row['graduation_date'])->format('Y-m-d') : null;
+
         // Find the student by ID number or create a new one
         $student = Student::firstOrNew(['student_id_number' => $row['student_id_number']]);
 
@@ -18,7 +29,7 @@ class StudentsImport implements ToModel, WithHeadingRow
         $student->middle_name = $row['middle_name'];
         $student->last_name = $row['last_name'];
         $student->suffix = $row['suffix'];
-        $student->birthdate = $row['birthdate'];
+        $student->birthdate = $birthdate;
         $student->purok = $row['purok'];
         $student->street_num = $row['street_num'];
         $student->street_name = $row['street_name'];
@@ -32,10 +43,31 @@ class StudentsImport implements ToModel, WithHeadingRow
         $student->father_contact = $row['father_contact'];
         $student->mother_contact = $row['mother_contact'];
         $student->guardian_contact = $row['guardian_contact'];
-        $student->year_level = $row['year_level'];
-        $student->graduation_date = $row['graduation_date'];
+        $student->enrollment_status = $enrollmentStatus;
+        $student->school_year = $row['school_year'];
+        $student->year_level = $yearLevel;
+        $student->graduation_date = $graduationDate;
 
         $student->save();
         return $student;
     }
+
+    /**
+     * Validate enrollment status to ensure it's one of the acceptable values.
+     */
+    private function getValidEnrollmentStatus($status)
+    {
+        $validStatuses = ['Enrolled', 'Not Enrolled', 'Graduate'];
+        return in_array($status, $validStatuses) ? $status : 'Not Enrolled'; // Default to 'Not Enrolled' if invalid
+    }
+
+    /**
+     * Validate year level to ensure it's one of the acceptable values.
+     */
+    private function getValidYearLevel($yearLevel)
+    {
+        $validYearLevels = ['1ST', '2ND', '3RD', '4TH', 'GRADUATE'];
+        return in_array($yearLevel, $validYearLevels) ? $yearLevel : '1ST'; // Default to '1ST' if invalid
+    }
+
 }

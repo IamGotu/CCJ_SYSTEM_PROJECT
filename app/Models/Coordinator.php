@@ -18,4 +18,5 @@ class Coordinator extends Authenticatable
     {
         return $this->hasMany(OjtRecord::class);
     }
+
 }

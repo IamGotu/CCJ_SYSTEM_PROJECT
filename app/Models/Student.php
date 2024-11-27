@@ -30,6 +30,8 @@ class Student extends Model
         'father_contact',
         'mother_contact',
         'guardian_contact',
+        'enrollment_status',
+        'school_year',
         'year_level',
         'graduation_date',
     ];
@@ -38,4 +40,37 @@ class Student extends Model
         'birthdate' => 'date',  // Cast birthdate to Carbon
         'graduation_date' => 'date',  // Cast graduation_date to Carbon
     ];
+
+    protected static function booted()
+    {
+        // When a student is created or updated
+        static::saved(function ($student) {
+            // Check if student is 3RD or 4TH year
+            if (in_array($student->year_level, ['3RD', '4TH'])) {
+                // Add debugging
+                \Log::info('Adding/Updating intern:', [
+                    'student_id' => $student->student_id_number,
+                    'year_level' => $student->year_level,
+                    'name' => $student->first_name . ' ' . $student->last_name
+                ]);
+
+                Intern::updateOrCreate(
+                    ['student_number' => $student->student_id_number],
+                    [
+                        'first_name' => explode(' ', $student->first_name)[0], // Get first name
+                        'middle_name' => $student->middle_name,
+                        'last_name' => explode(' ', $student->last_name)[0], // Get last name
+                        'year_level' => $student->year_level,
+                        'roster_number' => $student->student_id_number,
+                        'guardian' => $student->guardian_name ?? 'Not Specified',
+                        'guardian_contact' => $student->guardian_contact ?? 'Not Specified',
+                        'status' => 'active'
+                    ]
+                );
+            } else {
+                // If student is no longer 3RD or 4TH year, remove from interns table
+                Intern::where('student_number', $student->student_id_number)->delete();
+            }
+        });
+    }
 }

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Coordinator;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\CoordinatorsImport;
 
 class CoordinatorController extends Controller
 {
@@ -20,30 +22,6 @@ class CoordinatorController extends Controller
 
         // Pass the coordinators and search term to the view
         return view('coordinators.index', compact('coordinators', 'search'));
-    }
-
-
-    public function create()
-    {
-        return view('coordinators.create');
-    }
-
-    public function store(Request $request)
-    {
-        // Validate the incoming request data
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'contact' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:coordinators',
-            'address' => 'required|string|max:255',
-            'username' => 'required|string|max:255|unique:coordinators',
-        ]);
-
-        // Create the coordinator
-        Coordinator::create($validatedData);
-
-        // Redirect to the coordinators index page with a success message
-        return redirect()->route('coordinators.index')->with('success', 'Coordinator added successfully!');
     }
 
     public function edit(Coordinator $coordinator)
@@ -73,4 +51,22 @@ class CoordinatorController extends Controller
 
         return redirect()->route('coordinators.index')->with('success', 'Coordinator deleted successfully.');
     }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv|max:2048',
+        ]);
+
+        try {
+            Excel::import(new CoordinatorsImport, $request->file('file'));
+
+            // Show success message
+            return redirect()->route('coordinators.index')->with('success', 'Coordinators imported successfully.');
+        } catch (\Exception $e) {
+            // Show error message if the import fails
+            return redirect()->route('coordinators.index')->with('error', 'Error importing file: ' . $e->getMessage());
+        }
+    }
+
 }

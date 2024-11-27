@@ -30,7 +30,7 @@ HOW TO RUN THE PROJECT (CCJ_SYSTEM_PROJECT)
 
 14. Click Edit, select your user, and check Full Control. Click Apply and then OK to save the changes.
 
-15. Inside folder CCJ_SYSTEM_PROJECT find the file ".env.example" and change it to ".env"
+15. Inside folder CCJ_SYSTEM_PROJECT find the file ".env example" and change it to ".env"
 
 16. Open the terminal located in folder CCJ_SYSTEM_PROJECT and type "composer install"
 

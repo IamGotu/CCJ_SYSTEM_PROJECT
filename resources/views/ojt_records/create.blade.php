@@ -49,18 +49,21 @@
                     <!-- Year Level -->
                     <div class="mb-4">
                         <label for="year_level" class="block font-medium text-sm text-gray-700 dark:text-gray-300">Year Level</label>
-                        <select name="year_level" id="year_level" class="mt-1 block w-full p-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-gray-200" required>
-                            <option value="">Select Year Level</option>
-                            <option value="1ST" {{ old('year_level') == '1ST' ? 'selected' : '' }}>1ST</option>
-                            <option value="2ND" {{ old('year_level') == '2ND' ? 'selected' : '' }}>2ND</option>
-                            <option value="3RD" {{ old('year_level') == '3RD' ? 'selected' : '' }}>3RD</option>
-                            <option value="4TH" {{ old('year_level') == '4TH' ? 'selected' : '' }}>4TH</option>
-                            <option value="GRADUATE" {{ old('year_level') == 'GRADUATE' ? 'selected' : '' }}>GRADUATE</option>
+                        <select 
+                            name="year_level" 
+                            id="year_level" 
+                            class="px-4 py-2 rounded-md dark:bg-gray-700 w-full"
+                            required
+                        >
+                            <option value="" {{ old('year_level') == '' ? 'selected' : '' }}>Select Year Level</option>
+                            <option value="4th" {{ old('year_level') == '4th' ? 'selected' : '' }}>4th Year</option>
+                            <option value="Graduated" {{ old('year_level') == 'graduated' ? 'selected' : '' }}>Graduated</option>
                         </select>
                         @error('year_level')
                             <span class="text-red-500 text-xs">{{ $message }}</span>
                         @enderror
                     </div>
+
 
                     <!-- Coordinator Assigned -->
                     <div class="mb-4">

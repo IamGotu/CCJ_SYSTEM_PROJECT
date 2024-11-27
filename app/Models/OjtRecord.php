@@ -9,18 +9,22 @@ class OjtRecord extends Model
 {
     use HasFactory;
 
-    // Add name to fillable properties for mass assignment
+
     protected $fillable = [
         'name',
         'student_number',
+        'roster_number',
         'agency_assigned',
-        'credit_hours',
-        'coordinator_id',
+        'school_year',
         'year_level',
+        'coordinator_id',
+        'credit_hours',
+        'created_at',
+        'updated_at',
     ];
 
     public function coordinator()
     {
-        return $this->belongsTo(Coordinator::class);
+        return $this->belongsTo(Coordinator::class, 'coordinator_id');
     }
 }

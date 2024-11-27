@@ -3,17 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Models\Student;
+use App\Models\DerogatoryRecord;
 use App\Models\Intern;
-use Illuminate\Http\Request;
+use App\Models\OjtRecord;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        $students = Student::latest()->get();
-        $interns = Intern::latest()->get();
-        $schools = Intern::distinct()->pluck('school')->toArray();
-
-        return view('dashboard', compact('students', 'interns', 'schools'));
+        return view('dashboard', [
+            'totalStudents' => Student::count(),
+            'totalDerogatory' => DerogatoryRecord::count(),
+            'totalInterns' => Intern::where('status', 'Active')->count(),
+            'totalOJT' => OjtRecord::count(),
+        ]);
     }
 } 

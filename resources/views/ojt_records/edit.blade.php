@@ -12,6 +12,15 @@
                     @csrf
                     @method('PUT')
                     
+                    <!-- Roster Number -->
+                    <div class="mb-4">
+                        <label for="roster_number" class="block font-medium text-sm text-gray-700 dark:text-gray-300">Roster Number</label>
+                        <input type="text" name="roster_number" id="roster_number" class="form-input w-full" value="{{ old('roster_number', $ojtRecord->roster_number) }}">
+                        @error('roster_number')
+                            <span class="text-red-500 text-xs">{{ $message }}</span>
+                        @enderror
+                    </div>
+
                     <!-- Name -->
                     <div class="mb-4">
                         <label for="name" class="block font-medium text-sm text-gray-700 dark:text-gray-300">Name</label>
@@ -51,31 +60,44 @@
                     <!-- Year Level -->
                     <div class="mb-4">
                         <label for="year_level" class="block font-medium text-sm text-gray-700 dark:text-gray-300">Year Level</label>
-                        <select name="year_level" id="year_level" class="mt-1 block w-full p-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-gray-200" required>
-                            <option value="">Select Year Level</option>
-                            <option value="1ST" {{ old('year_level', $ojtRecord->year_level) == '1ST' ? 'selected' : '' }}>1ST</option>
-                            <option value="2ND" {{ old('year_level', $ojtRecord->year_level) == '2ND' ? 'selected' : '' }}>2ND</option>
-                            <option value="3RD" {{ old('year_level', $ojtRecord->year_level) == '3RD' ? 'selected' : '' }}>3RD</option>
-                            <option value="4TH" {{ old('year_level', $ojtRecord->year_level) == '4TH' ? 'selected' : '' }}>4TH</option>
-                            <option value="GRADUATE" {{ old('year_level', $ojtRecord->year_level) == 'GRADUATE' ? 'selected' : '' }}>GRADUATE</option>
+                        <select 
+                            name="year_level" 
+                            id="year_level" 
+                            class="px-4 py-2 rounded-md dark:bg-gray-700 w-full"
+                            required
+                        >
+                            <option value="" {{ old('year_level', $ojtRecord->year_level) == '' ? 'selected' : '' }}>Select Year Level</option>
+                            <option value="4th" {{ old('year_level', strtolower($ojtRecord->year_level)) == '4th' ? 'selected' : '' }}>4th Year</option>
+                            <option value="Graduated" {{ old('year_level', strtolower($ojtRecord->year_level)) == 'graduated' ? 'selected' : '' }}>Graduated</option>
                         </select>
                         @error('year_level')
                             <span class="text-red-500 text-xs">{{ $message }}</span>
                         @enderror
                     </div>
 
+                    <!-- School Year -->
+                    <div class="mb-4">
+                        <label for="school_year" class="block font-medium text-sm text-gray-700 dark:text-gray-300">School Year</label>
+                        <input type="text" name="school_year" id="school_year" class="form-input w-full" value="{{ old('school_year', $ojtRecord->school_year) }}">
+                        @error('school_year')
+                            <span class="text-red-500 text-xs">{{ $message }}</span>
+                        @enderror
+                    </div>
+
                     <!-- Dropdown coordinator -->
                     <div class="mb-4">
-                        <label for="coordinator_id" class="block text-sm font-medium text-gray-700">Coordinator Assigned</label>
-                        <select name="coordinator_id" id="coordinator_id" class="mt-1 block w-full p-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-gray-200">
-                            <option value="">Select Coordinator</option>
-                            @foreach($coordinators as $coordinator)
-                                <option value="{{ $coordinator->id }}" {{ old('coordinator_id', $ojtRecord->coordinator_id) == $coordinator->id ? 'selected' : '' }}>
-                                    {{ $coordinator->name }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
+                    <label for="coordinator_id" class="block text-sm font-medium text-gray-700">Coordinator Assigned</label>
+                    <select name="coordinator_id" class="form-control">
+                        <option value="">Select Coordinator</option>
+                        @foreach ($coordinators as $coordinator)
+                            <option value="{{ $coordinator->id }}" 
+                                {{ old('coordinator_id', $ojtRecord->coordinator_id) == $coordinator->id ? 'selected' : '' }}>
+                                {{ $coordinator->name }}
+                            </option>
+                        @endforeach
+                    </select>
+
+                                    </div>
 
                     <!-- Submit Button -->
                     <div>

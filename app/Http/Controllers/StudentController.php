@@ -27,7 +27,14 @@ class StudentController extends Controller
         $students = $query->orderBy('student_id_number')->get();
     
         return view('student_profile.index', compact('students'));
-    }    
+    }
+
+    public function show($id)
+    {
+        $student = Student::findOrFail($id);
+        return view('student_profile.view-profile', compact('student'));
+    }
+
     
     public function create()
     {
@@ -68,6 +75,8 @@ class StudentController extends Controller
             'father_contact' => 'nullable',
             'mother_contact' => 'nullable',
             'guardian_contact' => 'nullable',
+            'enrollment_status' => 'nullable|string|max:255',
+            'school_year' => 'nullable',
             'year_level' => 'required',
             'graduation_date' => 'nullable|date',
         ]);
@@ -106,6 +115,8 @@ class StudentController extends Controller
             'father_contact' => 'nullable|string|max:255',
             'mother_contact' => 'nullable|string|max:255',
             'guardian_contact' => 'nullable|string|max:255',
+            'enrollment_status' => 'nullable|string|max:255',
+            'school_year' => 'nullable|string|max:255',
             'year_level' => 'required|string',
             'graduation_date' => 'nullable|date',
         ]);

@@ -41,10 +41,17 @@
 
                     <!-- Agency Assigned -->
                     <div class="mb-4">
-                        <label for="agency_assigned" class="block font-medium text-sm text-gray-700 dark:text-gray-300">Agency Assigned</label>
-                        <input type="text" name="agency_assigned" id="agency_assigned" class="form-input w-full" value="{{ old('agency_assigned', $ojtRecord->agency_assigned) }}" required>
-                        @error('agency_assigned')
-                            <span class="text-red-500 text-xs">{{ $message }}</span>
+                        <label for="agency_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Agency</label>
+                        <select name="agency_id" id="agency_id" class="mt-1 block w-full p-2 border rounded-md dark:bg-gray-700 dark:text-gray-200">
+                            <option value="">Select Agency</option>
+                            @foreach ($agencies as $agency)
+                                <option value="{{ $agency->id }}" {{ old('agency_id', $ojtRecord->agency_id) == $agency->id ? 'selected' : '' }}>
+                                    {{ $agency->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('agency_id')
+                            <div class="text-sm text-red-600">{{ $message }}</div>
                         @enderror
                     </div>
 

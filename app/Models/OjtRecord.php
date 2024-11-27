@@ -14,7 +14,7 @@ class OjtRecord extends Model
         'name',
         'student_number',
         'roster_number',
-        'agency_assigned',
+        'agency_id',
         'school_year',
         'year_level',
         'coordinator_id',
@@ -26,5 +26,15 @@ class OjtRecord extends Model
     public function coordinator()
     {
         return $this->belongsTo(Coordinator::class, 'coordinator_id');
+    }
+
+    public function student()
+    {
+        return $this->belongsTo(Student::class, 'student_number', 'student_id_number');
+    }
+
+    public function agency()
+    {
+        return $this->belongsTo(Agency::class);
     }
 }

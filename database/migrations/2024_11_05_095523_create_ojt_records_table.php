@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('student_number')->unique();
-            $table->string('agency_assigned');
+            $table->string('agency_assigned')->nullable();
             $table->string('roster_number')->nullable();
             $table->string('school_year');
             $table->string('year_level')->nullable();

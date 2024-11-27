@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\OjtRecordsController;
 use App\Http\Controllers\CoordinatorController;
 use App\Http\Controllers\InternController;
@@ -66,34 +67,41 @@ Route::middleware('auth')->group(function () {
     Route::resource('ojt_records', OjtRecordsController::class);
     Route::post('/coordinators/import', [CoordinatorController::class, 'import'])->name('coordinators.import');
     Route::resource('coordinators', CoordinatorController::class);
-    //Integrate data from Student Profile
-    Route::get('/ojt-records/integrate-fourth-years', [OjtRecordsController::class, 'integrateFourthYearStudents'])->name('ojt_records.integrate');
-
+    
     //Agencies Records
     Route::resource('agencies', AgencyController::class);
-    Route::post('/agencies/import', [AgencyController::class, 'import'])->name('agencies.import');
+    Route::post('agencies/import', [AgencyController::class, 'import'])->name('agencies.import');
+    Route::delete('/agencies/{agency}', [AgencyController::class, 'destroy'])->name('agencies.destroy');
 
 // Route to display the list of derogatory records
-Route::get('/derogatory_records', [DerogatoryRecordController::class, 'index'])->name('derogatory_records.index');
 Route::resource('derogatory_records', DerogatoryRecordController::class);
 
 // Route to display the form for creating a new derogatory record
 Route::get('/derogatory_records/create', [DerogatoryRecordController::class, 'create'])->name('derogatory_records.create');
 
 // Route to handle storing the new derogatory record
-Route::post('/derogatory_records', [DerogatoryRecordController::class, 'store'])->name('derogatory_records.store');
-
-// Route to show a specific derogatory record's details
-Route::get('/derogatory_records/{id}', [DerogatoryRecordController::class, 'show'])->name('derogatory_records.show');
+Route::post('derogatory_records/{student_id}', [DerogatoryRecordController::class, 'store'])->name('derogatory_records.store');
+// In your routes file
+Route::get('derogatory_records/{student_id}', [DerogatoryRecordController::class, 'show'])->name('derogatory_records.show');
 
 // Route to display the form for editing an existing derogatory record
 Route::get('/derogatory_records/{id}/edit', [DerogatoryRecordController::class, 'edit'])->name('derogatory_records.edit');
 
 // Route to handle updating the derogatory record
-Route::put('/derogatory_records/{id}', [DerogatoryRecordController::class, 'update'])->name('derogatory_records.update');
+// In routes/web.php
+Route::put('derogatory_records/{id}', [DerogatoryRecordController::class, 'update'])->name('derogatory_records.update');
+
+Route::post('/derogatory-records/{student}/add', [DerogatoryRecordController::class, 'store'])->name('derogatory_records.add');
 
 // Route to handle deleting a derogatory record
 Route::delete('/derogatory_records/{id}', [DerogatoryRecordController::class, 'destroy'])->name('derogatory_records.destroy');
+
+Route::get('/complaints/create/{student_id_number}', [ComplaintController::class, 'create'])->name('complaints.create');
+Route::post('complaints', [ComplaintController::class, 'store'])->name('complaints.store');
+
+
+
+
 
 // Add this new route for status updates
 Route::patch('/intern-profile/{intern}/status', [InternController::class, 'updateStatus'])

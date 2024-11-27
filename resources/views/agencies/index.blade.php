@@ -5,6 +5,21 @@
         </h2>
     </x-slot>
 
+            <!-- Display Success Message -->
+            @if(session('success'))
+                <div id="success-message" class="bg-green-500 text-white p-4 rounded-md mb-4">
+                    {{ session('success') }}
+                </div>
+            @endif
+
+            <!-- Display Error Message -->
+            @if(session('error'))
+                <div id="error-message" class="bg-red-500 text-white p-4 rounded-md mb-4">
+                    {{ session('error') }}
+                </div>
+            @endif
+
+
     <div class="py-1">
         <div class="max-w mx-auto sm:px-6 lg:px-5">
 
@@ -17,12 +32,10 @@
 
             <!-- Import Form -->
             <div class="flex flex-col sm:flex-row sm:items-center mt-4 space-y-2 sm:space-y-0 sm:space-x-2">
-            <form method="POST" action="{{ route('agencies.import') }}" enctype="multipart/form-data" class="flex items-center space-x-2">
+            <form method="POST" action="{{ route('agencies.import') }}" enctype="multipart/form-data">
                 @csrf
                 <input type="file" name="file" class="p-1 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-gray-200">
-                <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-200 ml-2">
-                    Import Agencies
-                </button>
+                <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-200 ml-2">Import Agencies</button>
             </form>
 
 
@@ -63,7 +76,7 @@
                             <td class="py-6 px-4 text-center">{{ $agency->address }}</td>
                             <td class="py-6 px-4 text-center">
                                 <a href="{{ route('agencies.edit', $agency) }}" class="text-blue-500">Edit</a>
-                                <form action="{{ route('agencies.destroy', $agency) }}" method="POST" style="display: inline;">
+                                <form action="{{ route('agencies.destroy', $agency) }}" method="POST" style="display: inline;" onsubmit="return confirmDelete()">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="text-red-500">Delete</button>
@@ -79,4 +92,23 @@
             </table>
         </div>
     </div>
+    <script>
+        function confirmDelete() {
+            return confirm('Are you sure you want to delete this agency? This action cannot be undone.');
+        }
+
+            setTimeout(function() {
+            const successMessage = document.getElementById('success-message');
+            const errorMessage = document.getElementById('error-message');
+
+            if (successMessage) {
+                successMessage.style.display = 'none';
+            }
+
+            if (errorMessage) {
+                errorMessage.style.display = 'none';
+            }
+        }, 3000); // 3000 milliseconds = 3 seconds
+    </script>
+
 </x-app-layout>

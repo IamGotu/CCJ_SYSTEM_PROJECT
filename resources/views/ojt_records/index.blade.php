@@ -31,12 +31,6 @@
 
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-4 space-y-2 sm:space-y-0">
                 <div class="flex items-center space-x-2">
-                    <!-- Add OJT Record Button -->
-                    <a href="{{ route('ojt_records.integrate') }}" 
-                        class="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition duration-200">
-                        Integrate 4th Year Students
-                    </a>
-                </div>
 
                 <!-- Search and Filter Section -->
                 <div class="flex items-center space-x-2">
@@ -97,7 +91,9 @@
                                 <td class="py-6 px-4 text-center">{{ $record->roster_number ?? 'Not Assigned' }}</td> <!-- Added Roster Number -->
                                 <td class="py-6 px-4 text-center">{{ $record->student_number }}</td>
                                 <td class="py-6 px-4 text-center">{{ $record->name }}</td>
-                                <td class="py-6 px-4 text-center">{{ $record->agency_assigned }}</td>
+                                <td class="py-6 px-4 text-center">
+                                    {{ $record->agency ? $record->agency->name : 'Not Assigned' }}
+                                </td>
                                 <td class="py-6 px-4 text-center">{{ $record->credit_hours }}</td>
                                 <td class="py-6 px-4 text-center">{{ $record->year_level }}</td>
                                 <td class="py-6 px-4 text-center">{{ $record->school_year ?? 'Not Assigned' }}</td> <!-- Display School Year -->

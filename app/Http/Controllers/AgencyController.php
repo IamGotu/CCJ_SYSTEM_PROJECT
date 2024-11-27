@@ -6,6 +6,7 @@ use App\Models\Agency;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\AgenciesImport;
+use Illuminate\Support\Facades\Log;
 
 class AgencyController extends Controller
 {
@@ -53,19 +54,47 @@ class AgencyController extends Controller
         return view('agencies.index', compact('agencies'));
     }
 
+    // Handle the agency import process
     public function import(Request $request)
     {
+        Log::info('Import request received:', $request->all());
+
         // Validate the uploaded file
         $request->validate([
-            'file' => 'required|mimes:xlsx,csv,ods|max:2048', // 2MB max file size
+            'file' => 'required|mimes:xlsx,csv,ods|max:2048',
         ]);
 
-        // Import the file using the AgenciesImport class
         if ($request->hasFile('file')) {
-            Excel::import(new AgenciesImport, $request->file('file'));
+            try {
+                Log::info('File found, starting import.', ['file' => $request->file('file')->getRealPath()]);
+
+                // Import the file using the AgenciesImport class
+                $import = Excel::import(new AgenciesImport, $request->file('file'));
+
+                Log::info('Import finished successfully.');
+
+                return redirect()->route('agencies.index')->with('success', 'Agencies imported successfully!');
+            } catch (\Exception $e) {
+                Log::error('Error importing agencies: ' . $e->getMessage());
+                return redirect()->route('agencies.index')->with('error', 'Failed to import agencies');
+            }
         }
 
-        return redirect()->route('agencies.index')->with('success', 'Agencies imported successfully');
+        return redirect()->route('agencies.index')->with('error', 'No file selected or invalid file format');
+    }
+
+    public function destroy(Agency $agency)
+    {
+        try {
+            // Delete the agency record from the database
+            $agency->delete();
+
+            // Flash success message to session
+            return redirect()->route('agencies.index')->with('success', 'Agency deleted successfully.');
+        } catch (\Exception $e) {
+            // Flash error message to session if something goes wrong
+            return redirect()->route('agencies.index')->with('error', 'There was an issue deleting the agency.');
+        }
     }
 
 }

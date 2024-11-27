@@ -16,5 +16,10 @@ class Agency extends Model
         'contact_person',
         'contact_number',
     ];
+
+    public function ojtRecords()
+    {
+        return $this->hasMany(OjtRecord::class);
+    }
 }
 

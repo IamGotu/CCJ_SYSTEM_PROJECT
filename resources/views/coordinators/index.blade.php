@@ -5,6 +5,20 @@
         </h2>
     </x-slot>
 
+            <!-- Display Success Message -->
+            @if(session('success'))
+                <div id="success-message" class="bg-green-500 text-white p-4 rounded-md mb-4">
+                    {{ session('success') }}
+                </div>
+            @endif
+
+            <!-- Display Error Message -->
+            @if(session('error'))
+                <div id="error-message" class="bg-red-500 text-white p-4 rounded-md mb-4">
+                    {{ session('error') }}
+                </div>
+            @endif
+
     <div class="py-1">
         <div class="max-w mx-auto sm:px-6 lg:px-5">
 

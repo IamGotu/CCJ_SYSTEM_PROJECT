@@ -51,6 +51,7 @@ class DerogatoryRecord extends Model
     {
         return $this->belongsTo(Student::class, 'student_id_number', 'student_id_number');
     }
+    
 
 }
 

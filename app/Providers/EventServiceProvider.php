@@ -11,6 +11,9 @@ class EventServiceProvider extends ServiceProvider
         \App\Events\StudentImported::class => [
             \App\Listeners\SyncDerogatoryRecords::class,
         ],
+        \App\Events\StudentUpdated::class => [
+            \App\Listeners\UpdateRelatedModules::class,
+        ],   
     ];
 
     public function boot()

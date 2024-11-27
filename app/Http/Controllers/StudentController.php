@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Events\StudentImported;
+use App\Events\StudentUpdated;
 use App\Models\Student;
 use App\Imports\StudentsImport;
 use Maatwebsite\Excel\Facades\Excel;
@@ -133,6 +134,9 @@ class StudentController extends Controller
     
         // Update the student record
         $student->update($validatedData);
+
+            // Dispatch the event
+            event(new StudentUpdated($student));
     
         // Redirect back with a success message
         return redirect()->route('students.index')->with('success', 'Student profile updated successfully.');

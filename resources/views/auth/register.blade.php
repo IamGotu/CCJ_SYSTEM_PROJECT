@@ -13,6 +13,12 @@
                 <form method="POST" action="{{ route('students.store') }}" class="w-full max-w-screen-lg mx-auto px-8">
                     @csrf
 
+                    @if (session('success'))
+                        <div class="bg-green-500 text-white p-4 rounded mb-4">
+                            {{ session('success') }}
+                        </div>
+                    @endif
+
                     <!-- Student ID -->
                     <div class="mb-6">
                         <label for="student_id_number" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Student ID Number</label>

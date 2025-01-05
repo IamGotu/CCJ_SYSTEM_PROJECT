@@ -88,5 +88,9 @@ class Student extends Model
     {
         return $this->hasMany(Complaint::class, 'student_id_number', 'student_id_number');
     }
+    public function derogatoryRecordHistories()
+{
+    return $this->hasMany(DerogatoryRecordHistory::class, 'student_id_number', 'student_id_number');
+}
 
 }

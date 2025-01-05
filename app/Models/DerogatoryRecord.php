@@ -28,7 +28,6 @@ class DerogatoryRecord extends Model
         'first_name',
         'middle_name',
         'year_graduated',
-        'violation',
         'action_taken',
         'settled',
         'sanction',
@@ -36,6 +35,8 @@ class DerogatoryRecord extends Model
         'school_year',
         'enrollment_status',
         'graduation_date',
+        'violation_id',
+        'penalty', 
     ];
     
     /**

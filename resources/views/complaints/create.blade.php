@@ -46,16 +46,45 @@
 
                     <!-- Complaint Details Section -->
                     <section class="mt-6">
-                        <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-4">{{ __('Complaint Details') }}</h3>
+    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-4">{{ __('Complaint Details') }}</h3>
 
-                        <!-- Complainant Name -->
-                        <div class="mb-4">
-                            <label for="complainant_name" class="block text-sm font-medium text-gray-800 dark:text-gray-300">{{ __('Complainant Name') }}</label>
-                            <input type="text" name="complainant_name" id="complainant_name" class="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white dark:border-gray-600" value="{{ old('complainant_name') }}" required>
-                            @error('complainant_name')<small class="text-red-500">{{ $message }}</small>@enderror
-                        </div>
+    <!-- Complainant Name -->
+    <div class="mb-4">
+        <label for="complainant_name" class="block text-sm font-medium text-gray-800 dark:text-gray-300">{{ __('Complainant Name') }}</label>
+        <input type="text" name="complainant_name" id="complainant_name" class="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white dark:border-gray-600" value="{{ old('complainant_name') }}" required>
+        @error('complainant_name')<small class="text-red-500">{{ $message }}</small>@enderror
+    </div>
 
-                        <!-- Complainant Position -->
+    <!-- Complainant Type -->
+    <div class="mb-4">
+        <label for="complainant_type" class="block text-sm font-medium text-gray-800 dark:text-gray-300">{{ __('Complainant Type') }}</label>
+        <div class="flex items-center space-x-4">
+            <div>
+                <input type="radio" name="complainant_type" id="complainant_type_student" value="student" {{ old('complainant_type') == 'student' ? 'checked' : '' }}>
+                <label for="complainant_type_student" class="text-sm text-gray-800 dark:text-gray-300">{{ __('Student') }}</label>
+            </div>
+            <div>
+                <input type="radio" name="complainant_type" id="complainant_type_civilian" value="civilian" {{ old('complainant_type') == 'civilian' ? 'checked' : '' }}>
+                <label for="complainant_type_civilian" class="text-sm text-gray-800 dark:text-gray-300">{{ __('Civilian') }}</label>
+            </div>
+        </div>
+        @error('complainant_type')<small class="text-red-500">{{ $message }}</small>@enderror
+    </div>
+
+    <!-- Complainant Student ID (Conditional) -->
+    <div id="complainant_student_id" class="mb-4" style="display: {{ old('complainant_type') == 'student' ? 'block' : 'none' }}">
+        <label for="complainant_student_id" class="block text-sm font-medium text-gray-800 dark:text-gray-300">{{ __('Complainant Student ID') }}</label>
+        <input type="text" name="complainant_student_id" id="complainant_student_id_input" class="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white dark:border-gray-600" value="{{ old('complainant_student_id') }}" {{ old('complainant_type') == 'student' ? 'required' : '' }}>
+        @error('complainant_student_id')<small class="text-red-500">{{ $message }}</small>@enderror
+    </div>
+
+                    <!-- Complainant Email -->
+                    <div class="mb-4">
+                        <label for="complainant_email" class="block text-sm font-medium text-gray-800 dark:text-gray-300">{{ __('Complainant Email') }}</label>
+                        <input type="email" name="complainant_email" id="complainant_email" class="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white dark:border-gray-600" value="{{ old('complainant_email') }}" required>
+                        @error('complainant_email')<small class="text-red-500">{{ $message }}</small>@enderror
+                    </div>
+                                            <!-- Complainant Position -->
                         <div class="mb-4">
                             <label for="complainant_position" class="block text-sm font-medium text-gray-800 dark:text-gray-300">{{ __('Complainant Position') }}</label>
                             <input type="text" name="complainant_position" id="complainant_position" class="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white dark:border-gray-600" value="{{ old('complainant_position') }}" required>
@@ -160,4 +189,30 @@
             </div>
         </div>
     </div>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const complainantTypeRadio = document.querySelectorAll('input[name="complainant_type"]');
+        const complainantStudentIdDiv = document.getElementById('complainant_student_id');
+        const complainantStudentIdInput = document.getElementById('complainant_student_id_input'); // Ensure you are selecting the correct input field
+
+        // Toggle visibility based on the selected complainant type
+        complainantTypeRadio.forEach(radio => {
+            radio.addEventListener('change', function() {
+                if (this.value === 'student') {
+                    complainantStudentIdDiv.style.display = 'block';
+                } else {
+                    complainantStudentIdDiv.style.display = 'none';
+                    complainantStudentIdInput.value = ''; // Clear the value if the field is hidden
+                }
+            });
+
+            // Initial check when the page loads
+            if (radio.checked && radio.value === 'student') {
+                complainantStudentIdDiv.style.display = 'block';
+            } else {
+                complainantStudentIdInput.value = ''; // Ensure it's cleared when not student
+            }
+        });
+    });
+</script>
 </x-app-layout>

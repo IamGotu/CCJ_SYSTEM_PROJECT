@@ -34,7 +34,13 @@
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button class="flex items-center gap-2 px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg hover:bg-gray-700 transition duration-150 ease-in-out group">
-                            <div class="text-gray-300 group-hover:text-white">{{ Auth::user()->name }}</div>
+                            @if (!Auth::check())
+                                <script>window.location = "{{ route('login') }}";</script>
+                            @else
+                                <div class="text-gray-300 group-hover:text-white">
+                                    {{ Auth::user()->name }}
+                                </div>
+                            @endif
                             <svg class="w-5 h-5 text-gray-400 group-hover:text-white transition-transform duration-200 group-hover:-rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                             </svg>

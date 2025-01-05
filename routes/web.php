@@ -7,6 +7,8 @@ use App\Http\Controllers\OjtRecordsController;
 use App\Http\Controllers\CoordinatorController;
 use App\Http\Controllers\InternController;
 use App\Http\Controllers\DerogatoryRecordController;
+use App\Http\Controllers\DerogatoryRecordHistoryController;
+use App\Http\Controllers\FileController;
 use App\Http\Controllers\LoginController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -40,6 +42,10 @@ Route::get('/dashboard', function () {
         'totalOJT' => \App\Models\OJTRecord::count(),
     ]);
 })->middleware(['auth'])->name('dashboard');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/protected-route', [SomeController::class, 'someMethod'])->name('protected.route');
+});
 
 // Student routes
 Route::prefix('students')->group(function () {
@@ -81,13 +87,16 @@ Route::get('/derogatory_records/create', [DerogatoryRecordController::class, 'cr
 Route::post('derogatory_records/{student_id}', [DerogatoryRecordController::class, 'store'])->name('derogatory_records.store');
 // In your routes file
 Route::get('derogatory_records/{student_id}', [DerogatoryRecordController::class, 'show'])->name('derogatory_records.show');
-
+Route::get('/students/{studentId}/history', [DerogatoryRecordController::class, 'showHistory'])->name('students.history');
 // Route to display the form for editing an existing derogatory record
-Route::get('/derogatory_records/{id}/edit', [DerogatoryRecordController::class, 'edit'])->name('derogatory_records.edit');
+Route::get('derogatory_records/{id}/edit', [DerogatoryRecordController::class, 'edit'])->name('derogatory_records.edit');
+Route::get('/api/penalty', [DerogatoryRecordController::class, 'getPenalty'])->name('penalty.fetch');
+Route::get('derogatory-record-histories/{id}/edit', [DerogatoryRecordHistoryController::class, 'edit'])->name('derogatory_record_histories.edit');
+Route::put('derogatory-record-histories/{id}', [DerogatoryRecordHistoryController::class, 'update'])->name('derogatory_record_histories.update');
 
 // Route to handle updating the derogatory record
 // In routes/web.php
-Route::put('derogatory_records/{id}', [DerogatoryRecordController::class, 'update'])->name('derogatory_records.update');
+Route::put('/updateRecord/{id}', [DerogatoryRecordController::class, 'update']);
 
 Route::post('/derogatory-records/{student}/add', [DerogatoryRecordController::class, 'store'])->name('derogatory_records.add');
 
@@ -98,6 +107,12 @@ Route::get('/complaints/create/{student_id_number}', [ComplaintController::class
 Route::post('complaints', [ComplaintController::class, 'store'])->name('complaints.store');
 
 
+Route::get('/evidence-files/{filename}', [FileController::class, 'showEvidenceFile'])->name('evidence.file');
+
+Route::get('/complaints/{id}/{mode?}', [ComplaintController::class, 'showOrEdit'])->name('complaints.showOrEdit');
+Route::put('/complaints/{id}', [ComplaintController::class, 'update'])->name('complaints.update');
+
+Route::delete('/complaints/{id}', [ComplaintController::class, 'destroy'])->name('complaints.destroy');
 
 
 

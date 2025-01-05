@@ -43,6 +43,10 @@ Route::get('/dashboard', function () {
     ]);
 })->middleware(['auth'])->name('dashboard');
 
+Route::middleware(['auth'])->group(function () {
+    Route::get('/protected-route', [SomeController::class, 'someMethod'])->name('protected.route');
+});
+
 // Student routes
 Route::prefix('students')->group(function () {
     Route::get('/', [StudentController::class, 'index'])->name('students.index');

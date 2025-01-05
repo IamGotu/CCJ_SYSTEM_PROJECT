@@ -6,6 +6,7 @@ use App\Models\Student;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class StudentsImport implements ToModel, WithHeadingRow
 {
@@ -63,7 +64,7 @@ class StudentsImport implements ToModel, WithHeadingRow
                 'middle_name' => $row['middle_name'] ?? '',
                 'last_name' => $row['last_name'] ?? '',
                 'suffix' => $row['suffix'] ?? '',
-                'birthdate' => $this->safeParseDate($row['birthdate'] ?? null),
+                'birthdate' => $this->ParseDate($row['birthdate'] ?? null),
                 'purok' => $row['purok'] ?? '',
                 'street_num' => $row['street_num'] ?? '',
                 'street_name' => $row['street_name'] ?? '',
@@ -80,7 +81,7 @@ class StudentsImport implements ToModel, WithHeadingRow
                 'enrollment_status' => 'Not Enrolled', // Default value
                 'school_year' => $row['school_year'] ?? date('Y').'-'.(date('Y')+1),
                 'year_level' => $this->getValidYearLevel($row['year_level'] ?? null),
-                'graduation_date' => $this->safeParseDate($row['graduation_date'] ?? null)
+                'graduation_date' => $this->ParseDate($row['graduation_date'] ?? null)
             ]);
 
             // Update enrollment status if provided
@@ -90,12 +91,6 @@ class StudentsImport implements ToModel, WithHeadingRow
 
             $student->save();
             return $student;
-
-        } catch (\Exception $e) {
-            \Log::error('Import error: ' . $e->getMessage());
-            \Log::error('Row data: ', $row);
-            throw $e;
-        }
     }
 
     /**

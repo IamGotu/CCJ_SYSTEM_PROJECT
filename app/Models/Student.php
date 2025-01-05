@@ -34,11 +34,17 @@ class Student extends Model
         'school_year',
         'year_level',
         'graduation_date',
+        'batch_name',
+        'cibat_class',
+        'roster_number',
+        'documents',
+        'status'
     ];
 
     protected $casts = [
         'birthdate' => 'date',  // Cast birthdate to Carbon
         'graduation_date' => 'date',  // Cast graduation_date to Carbon
+        'documents' => 'array'
     ];
 
     protected static function booted()

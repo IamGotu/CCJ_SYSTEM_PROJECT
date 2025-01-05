@@ -87,10 +87,11 @@ class StudentController extends Controller
             'mother_contact' => 'nullable',
             'guardian_contact' => 'nullable',
         ]);
-
+    
         Student::create($request->all());
-
-        return redirect()->route('students.index')->with('success', 'Student profile created successfully.');
+    
+        // Redirect to the registration view with a success message
+        return redirect()->route('register')->with('success', 'Student information added successfully.');
     }
 
     public function edit(Student $student)

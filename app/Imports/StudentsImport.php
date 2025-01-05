@@ -48,8 +48,54 @@ class StudentsImport implements ToModel, WithHeadingRow
         $student->year_level = $yearLevel;
         $student->graduation_date = $graduationDate;
 
-        $student->save();
-        return $student;
+            // Basic validation
+            if (empty($row['student_id_number'])) {
+                \Log::warning('Skipping row - missing student ID number');
+                return null;
+            }
+
+            // Create or update student
+            $student = Student::firstOrNew(['student_id_number' => $row['student_id_number']]);
+
+            // Set values with defaults
+            $student->fill([
+                'first_name' => $row['first_name'] ?? '',
+                'middle_name' => $row['middle_name'] ?? '',
+                'last_name' => $row['last_name'] ?? '',
+                'suffix' => $row['suffix'] ?? '',
+                'birthdate' => $this->safeParseDate($row['birthdate'] ?? null),
+                'purok' => $row['purok'] ?? '',
+                'street_num' => $row['street_num'] ?? '',
+                'street_name' => $row['street_name'] ?? '',
+                'barangay' => $row['barangay'] ?? '',
+                'city' => $row['city'] ?? '',
+                'state' => $row['state'] ?? '',
+                'contact_number' => $row['contact_number'] ?? '',
+                'father_name' => $row['father_name'] ?? '',
+                'mother_name' => $row['mother_name'] ?? '',
+                'guardian_name' => $row['guardian_name'] ?? '',
+                'father_contact' => $row['father_contact'] ?? '',
+                'mother_contact' => $row['mother_contact'] ?? '',
+                'guardian_contact' => $row['guardian_contact'] ?? '',
+                'enrollment_status' => 'Not Enrolled', // Default value
+                'school_year' => $row['school_year'] ?? date('Y').'-'.(date('Y')+1),
+                'year_level' => $this->getValidYearLevel($row['year_level'] ?? null),
+                'graduation_date' => $this->safeParseDate($row['graduation_date'] ?? null)
+            ]);
+
+            // Update enrollment status if provided
+            if (isset($row['enrollment_status'])) {
+                $student->enrollment_status = $this->getValidEnrollmentStatus($row['enrollment_status']);
+            }
+
+            $student->save();
+            return $student;
+
+        } catch (\Exception $e) {
+            \Log::error('Import error: ' . $e->getMessage());
+            \Log::error('Row data: ', $row);
+            throw $e;
+        }
     }
 
     /**
@@ -92,5 +138,4 @@ class StudentsImport implements ToModel, WithHeadingRow
     {
         return preg_match('/\d{2}\/\d{2}\/\d{4}/', $date);  // Matches d/m/Y format
     }
-
 }

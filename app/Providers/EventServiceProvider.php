@@ -13,8 +13,12 @@ class EventServiceProvider extends ServiceProvider
         ],
         \App\Events\StudentUpdated::class => [
             \App\Listeners\UpdateRelatedModules::class,
-        ],   
-    ];
+        ],  
+    \App\Events\DerogatoryRecordUpdated::class => [
+        \App\Listeners\CreateDerogatoryRecordHistory::class,
+    ],
+];
+    
 
     public function boot()
     {

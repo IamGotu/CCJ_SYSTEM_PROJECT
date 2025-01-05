@@ -28,6 +28,9 @@ class Complaint extends Model
         'requested_action',
         'evidence_files',
         'view_count',
+        'complainant_type',
+        'complainant_student_id',
+        'complainant_email',
     ];
     protected $casts = [
         'evidence_files' => 'array', // This will allow you to store it as an array in JSON format

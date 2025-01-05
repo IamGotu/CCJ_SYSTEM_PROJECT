@@ -46,12 +46,6 @@
                             class="w-full py-2.5 bg-gradient-to-r from-blue-500 to-blue-700 text-white font-semibold rounded-md transition duration-200 hover:opacity-90">
                         LOG IN
                     </button>
-
-                    <!-- Add Register Link -->
-                    <div class="text-center mt-4">
-                        <span class="text-gray-400">Don't have an account?</span>
-                        <a href="{{ route('register') }}" class="text-blue-500 hover:text-blue-400 ml-1">Register</a>
-                    </div>
                 </form>
             </div>
         </div>

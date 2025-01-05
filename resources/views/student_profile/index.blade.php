@@ -10,11 +10,6 @@
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-4 space-y-2 sm:space-y-0">
 
                 <div class="flex items-center space-x-2">
-                    <!-- Add Student Button -->
-                    <a href="{{ route('students.create') }}" class="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition duration-200">
-                        Add Student
-                    </a>
-                    
                     <!-- Import Students Button -->
                     <form action="{{ route('students.import') }}" method="POST" enctype="multipart/form-data" class="flex items-center">
                         @csrf
@@ -26,32 +21,28 @@
                 </div>
 
                 <!-- Search Form and Filter Container -->
-                <div class="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-2 w-full sm:w-auto">
-                    <!-- Search Form -->
-                    <form method="GET" action="{{ route('students.index') }}" class="flex flex-col sm:flex-row sm:space-x-2 w-full sm:w-auto">
-                        <!-- Search Input -->
-                        <input type="text" name="search" placeholder="Search by name or ID"
-                            class="p-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-gray-200 w-full sm:w-60"
-                            value="{{ request('search') }}">
+                <div class="flex flex-col sm:flex-row sm:space-x-4 items-center w-full sm:w-1/2 ">
 
-                        <!-- Year Level Filter Dropdown -->
-                        <select name="year_level" class="p-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-gray-200 w-full sm:w-auto">
-                            <option value="">Filter by Year Level</option>
+                    <!-- Search Input for Real-Time Search -->
+                    <div class="flex space-x-2 w-full sm:w-3/4 lg:w-3/4">
+                        <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Search by Student Number or Name"
+                            class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+                    </div>
+
+                    <!-- Year Level Filter Dropdown -->
+                    <form method="GET" action="{{ route('students.index') }}" class="flex w-full sm:w-auto mt-2 sm:mt-0">
+                        <select name="year_level" class="p-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-gray-200 w-full sm:w-auto" id="yearLevelSelect" onchange="this.form.submit()">
+                            <option value="">All Year Level</option>
                             <option value="1ST" {{ request('year_level') == '1ST' ? 'selected' : '' }}>1ST</option>
                             <option value="2ND" {{ request('year_level') == '2ND' ? 'selected' : '' }}>2ND</option>
                             <option value="3RD" {{ request('year_level') == '3RD' ? 'selected' : '' }}>3RD</option>
                             <option value="4TH" {{ request('year_level') == '4TH' ? 'selected' : '' }}>4TH</option>
                             <option value="GRADUATE" {{ request('year_level') == 'GRADUATE' ? 'selected' : '' }}>GRADUATE</option>
                         </select>
-
-                        <!-- Search Button -->
-                        <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-200">
-                            Search
-                        </button>
                     </form>
 
                     <!-- Refresh Button -->
-                    <a href="{{ route('students.index') }}" class="bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600 transition duration-200 sm:ml-2">
+                    <a href="{{ route('students.index') }}" class="bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600 transition duration-200 w-full sm:w-auto mt-2 sm:mt-0">
                         Refresh
                     </a>
                 </div>
@@ -60,41 +51,27 @@
 
         <!-- Adding overflow-x-auto for horizontal scroll on small screens -->
         <div class="overflow-x-auto mt-6 px-4 sm:px-6 lg:px-5">
-            <table class="min-w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600">
+            <table id="studentsTable" class="min-w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600">
                 <thead class="bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-300 text-xs font-medium uppercase tracking-wider">
                     <tr>
                         <th class="py-6 px-4 text-center">Student ID Number</th>
                         <th class="py-6 px-4 text-center">Name</th>
-                        <th class="py-6 px-4 text-center">Birthdate</th>
-                        <th class="py-6 px-4 text-center">Address</th>
                         <th class="py-6 px-4 text-center">Contact Number</th>
-                        <th class="py-6 px-4 text-center">Guardian</th>
-                        <th class="py-6 px-4 text-center">Guardian Contact</th>
+                        <th class="py-6 px-4 text-center">Enrollement Status</th>
+                        <th class="py-6 px-4 text-center">School Year</th>
                         <th class="py-6 px-4 text-center">Year Level</th>
                         <th class="py-6 px-4 text-center">Graduation Date</th>
                         <th class="py-6 px-4 text-center">Action</th>
                     </tr>
                 </thead>
-                <tbody class="text-gray-600 dark:text-gray-400 text-sm font-light">
+                <tbody id="studentsTableBody" class="text-gray-600 dark:text-gray-400 text-sm font-light">
                     @forelse ($students as $student)
-                        <tr class="border-b border-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-200">
+                        <tr onclick="window.location='{{ route('students.show', $student->id) }}'" class="border-b border-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-200">
                             <td class="py-6 px-4 text-center">{{ $student->student_id_number }}</td>
                             <td class="py-6 px-4 text-center">{{ $student->first_name }} {{ $student->middle_name }} {{ $student->last_name }} {{ $student->suffix }}</td>
-                            <td class="py-6 px-4 text-center">{{ $student->birthdate->format('Y-m-d') }}</td>
-                            <td class="py-6 px-4 text-center">{{ $student->purok }} {{ $student->street_num }} {{ $student->street_name }} {{ $student->barangay }} {{ $student->city }} {{ $student->state }}</td>
                             <td class="py-6 px-4 text-center">{{ $student->contact_number ?? 'N/A' }}</td>
-
-                            <!-- Guardian Name Logic -->
-                            <td class="py-6 px-4 text-center">
-                                {{ implode(' and ', array_filter([$student->father_name, $student->mother_name])) ?: $student->guardian_name }}
-                            </td>
-
-                            <!-- Guardian Contact Logic -->
-                            <td class="py-6 px-4 text-center">
-                                {{ implode(' and ', array_filter([$student->father_contact, $student->mother_contact])) ?: $student->guardian_contact }}
-                            </td>
-
-                            <!-- Year Level -->
+                            <td class="py-6 px-4 text-center">{{ $student->enrollment_status }}</td>
+                            <td class="py-6 px-4 text-center">{{ $student->school_year }}</td>
                             <td class="py-2 px-4 text-center">{{ $student->year_level }}</td>
                             <td class="py-2 px-4 text-center">{{ $student->graduation_date ? $student->graduation_date->format('Y-m-d') : 'N/A' }}</td>
                             <td class="py-2 px-4 text-center">
@@ -108,13 +85,68 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="10" class="py-4 px-6 text-center text-gray-500 dark:text-gray-400">
+                            <td colspan="8" class="py-4 px-6 text-center text-gray-500 dark:text-gray-400">
                                 No records found
                             </td>
                         </tr>
                     @endforelse
+
+                    <!-- No results found message inside the table -->
+                    <tr id="noResults" class="hidden">
+                        <td colspan="8" class="py-4 px-6 text-center text-gray-500 dark:text-gray-400">No results found</td>
+                    </tr>
                 </tbody>
             </table>
         </div> <!-- End overflow-x-auto -->
     </div>
+
+    <script>
+        // Real-Time Search and Filter Functionality
+        function filterTable() {
+            const query = document.getElementById('searchInput').value.toLowerCase(); // Get the search query
+            const yearLevel = document.getElementById('yearLevelSelect').value.toLowerCase(); // Get the selected year level
+            const rows = document.querySelectorAll('#studentsTableBody tr'); // Get all rows of the table body
+            const noResultsMessage = document.getElementById('noResults'); // Get the 'No results found' row
+            let noResultsFound = true;
+
+            rows.forEach(row => {
+                // Skip the 'No results found' row itself to avoid hiding it prematurely
+                if (row.id === 'noResults') return;
+
+                const cells = row.getElementsByTagName('td'); // Get cells of the row
+                let matchFound = false;
+                let yearMatch = false;
+
+                // Loop through each cell in the row to check if it matches the search query
+                for (let i = 0; i < cells.length; i++) {
+                    if (cells[i].textContent.toLowerCase().includes(query)) {
+                        matchFound = true;
+                        break;
+                    }
+                }
+
+                // Check for Year Level filter match (if any year level is selected)
+                if (yearLevel && !row.querySelector('td:nth-child(6)').textContent.toLowerCase().includes(yearLevel)) {
+                    yearMatch = false;
+                } else {
+                    yearMatch = true;
+                }
+
+                // Show or hide the row based on whether both search and year level match
+                if (matchFound && yearMatch) {
+                    row.style.display = ''; // Show row
+                    noResultsFound = false;
+                } else {
+                    row.style.display = 'none'; // Hide row
+                }
+            });
+
+            // Show or hide the 'No results found' message
+            if (noResultsFound) {
+                noResultsMessage.classList.remove('hidden');
+            } else {
+                noResultsMessage.classList.add('hidden');
+            }
+        }
+    </script>
 </x-app-layout>

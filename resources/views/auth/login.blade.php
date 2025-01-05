@@ -40,7 +40,7 @@
                                class="w-4 h-4 bg-[#0f1218] border-gray-700 rounded">
                         <label for="remember" class="ml-2 text-sm text-gray-400">Remember me</label>
                     </div>
-
+    
                     <!-- Login Button -->
                     <button type="submit" 
                             class="w-full py-2.5 bg-gradient-to-r from-blue-500 to-blue-700 text-white font-semibold rounded-md transition duration-200 hover:opacity-90">
@@ -49,8 +49,8 @@
 
                     <!-- Add Register Link -->
                     <div class="text-center mt-4">
-                        <span class="text-gray-400">Don't have an account?</span>
-                        <a href="{{ route('register') }}" class="text-blue-500 hover:text-blue-400 ml-1">Register</a>
+                        <span class="text-gray-400">Are you a student?</span>
+                        <a href="{{ route('register') }}" class="text-blue-500 hover:text-blue-400 ml-1">Register here</a>
                     </div>
                 </form>
             </div>

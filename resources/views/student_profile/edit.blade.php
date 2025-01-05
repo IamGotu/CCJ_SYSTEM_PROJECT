@@ -160,6 +160,26 @@
                                    class="mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-400 dark:bg-gray-700 dark:text-gray-200">
                         </div>
 
+                        <!-- Enrollment Status -->
+                        <div class="mb-4">
+                            <label for="enrollment_status" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Enrollment Status</label>
+                            <select name="enrollment_status" required
+                                    class="mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-400 dark:bg-gray-700 dark:text-gray-200">
+                                <option value="" disabled>Select Enrollment Status</option>
+                                <option value="Enrolled" {{ old('enrollment_status', $student->enrollment_status) === 'Enrolled' ? 'selected' : '' }}>Enrolled</option>
+                                <option value="Not Enrolled" {{ old('enrollment_status', $student->enrollment_status) === 'Not Enrolled' ? 'selected' : '' }}>Not Enrolled</option>
+                                <option value="GRADUATE" {{ old('enrollment_status', $student->enrollment_status) === 'GRADUATE' ? 'selected' : '' }}>GRADUATE</option>
+                            </select>
+                        </div>
+
+                        <!-- School Year -->
+                        <div class="mb-4">
+                            <label for="school_year" class="block text-sm font-medium text-gray-700 dark:text-gray-300">School Year</label>
+                            <input type="text" name="school_year" id="school_year"
+                                   value="{{ old('school_year', $student->school_year) }}"
+                                    class="mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-400 dark:bg-gray-700 dark:text-gray-200">
+                        </div>
+
                         <!-- Year Level -->
                         <div class="mb-4">
                             <label for="year_level" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Year Level</label>

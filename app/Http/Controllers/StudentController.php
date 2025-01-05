@@ -1,13 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Events\StudentImported;
+use App\Events\StudentUpdated;
 use App\Models\Student;
 use App\Imports\StudentsImport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
-use App\Models\Intern;
-
 class StudentController extends Controller
 {
     public function index(Request $request)
@@ -29,7 +28,14 @@ class StudentController extends Controller
         $students = $query->orderBy('student_id_number')->get();
     
         return view('student_profile.index', compact('students'));
-    }    
+    }
+
+    public function show($id)
+    {
+        $student = Student::findOrFail($id);
+        return view('student_profile.view-profile', compact('student'));
+    }
+
     
     public function create()
     {
@@ -41,11 +47,21 @@ class StudentController extends Controller
         $request->validate([
             'file' => 'required|mimes:xlsx,xls,csv',
         ]);
-
+    
+        // Import student data
         Excel::import(new StudentsImport, $request->file('file'));
-
+    
+        // Fire the event after data is imported
+        // Get the latest student records from the database or use the imported data
+        $students = Student::all(); // You can adjust this to only get newly added students if needed
+    
+        foreach ($students as $student) {
+            event(new StudentImported($student));  // Fire the event for each imported student
+        }
+    
         return redirect()->route('students.index')->with('success', 'Student data imported successfully.');
     }
+    
     
     public function store(Request $request)
     {
@@ -70,8 +86,6 @@ class StudentController extends Controller
             'father_contact' => 'nullable',
             'mother_contact' => 'nullable',
             'guardian_contact' => 'nullable',
-            'year_level' => 'required',
-            'graduation_date' => 'nullable|date',
         ]);
 
         Student::create($request->all());
@@ -86,8 +100,8 @@ class StudentController extends Controller
 
     public function update(Request $request, Student $student)
     {
-        $validated = $request->validate([
-            'year_level' => 'required|string',
+        // Validate the incoming request data
+        $validatedData = $request->validate([
             'student_id_number' => 'required|string|max:255',
             'first_name' => 'required|string|max:255',
             'middle_name' => 'nullable|string|max:255',
@@ -108,40 +122,20 @@ class StudentController extends Controller
             'father_contact' => 'nullable|string|max:255',
             'mother_contact' => 'nullable|string|max:255',
             'guardian_contact' => 'nullable|string|max:255',
+            'enrollment_status' => 'nullable|string|max:255',
+            'school_year' => 'nullable|string|max:255',
+            'year_level' => 'nullable|string',
             'graduation_date' => 'nullable|date',
         ]);
+    
+        // Update the student record
+        $student->update($validatedData);
 
-        // Update student record
-        $student->update($validated);
-
-        // Sync with interns table
-        if (in_array($validated['year_level'], ['3RD', '4TH'])) {
-            // Update or create intern record
-            Intern::updateOrCreate(
-                ['student_number' => $validated['student_id_number']],
-                [
-                    'first_name' => $student->first_name,
-                    'middle_name' => $student->middle_name,
-                    'last_name' => $student->last_name,
-                    'year_level' => $validated['year_level'], // Use the new year level
-                    'guardian' => $student->guardian_name ?? 'Not Specified',
-                    'guardian_contact' => $student->guardian_contact ?? 'Not Specified',
-                    'status' => 'active'
-                ]
-            );
-        } else {
-            // If not 3rd or 4th year, remove from interns
-            Intern::where('student_number', $validated['student_id_number'])->delete();
-        }
-
-        // Add debugging
-        \Log::info('Student Update:', [
-            'student_id' => $validated['student_id_number'],
-            'old_year_level' => $student->getOriginal('year_level'),
-            'new_year_level' => $validated['year_level']
-        ]);
-
-        return redirect()->route('students.index')->with('success', 'Student updated successfully.');
+            // Dispatch the event
+            event(new StudentUpdated($student));
+    
+        // Redirect back with a success message
+        return redirect()->route('students.index')->with('success', 'Student profile updated successfully.');
     }    
 
     public function destroy(Student $student)

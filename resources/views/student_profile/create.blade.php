@@ -33,6 +33,7 @@
                             'father_contact' => 'Father Contact',
                             'mother_contact' => 'Mother Contact',
                             'guardian_contact' => 'Guardian Contact',
+                            'school_year' => 'School Year',
                         ] as $name => $label)
                             <div class="mb-4">
                                 <label for="{{ $name }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ $label }}</label>
@@ -43,6 +44,17 @@
                                        @if(in_array($name, ['student_id_number', 'first_name', 'last_name', 'birthdate'])) required @endif>
                             </div>
                         @endforeach
+
+                        <div class="mb-4">
+                            <label for="enrollment_status" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Enrollment Status</label>
+                            <select name="enrollment_status" required
+                                    class="mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-400 dark:bg-gray-700 dark:text-gray-200">
+                                <option value="" disabled selected>Select Enrollment Status</option>
+                                <option value="Enrolled">Enrolled</option>
+                                <option value="Not Enrolled">Not Enrolled</option>
+                                <option value="GRADUATE">GRADUATE</option>
+                            </select>
+                        </div>
 
                         <div class="mb-4">
                             <label for="year_level" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Year Level</label>

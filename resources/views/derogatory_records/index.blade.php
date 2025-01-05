@@ -8,11 +8,7 @@
     <div class="py-1">
         <div class="max-w mx-auto sm:px-6 lg:px-5">
             <!-- Header with Add Record Button and Search -->
-            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-4 space-y-2 sm:space-y-0">
-                <a href="{{ route('derogatory_records.create') }}" 
-                   class="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition duration-200 w-full sm:w-auto">
-                    Add New Record
-                </a>
+
                 <div class="flex space-x-2 w-full sm:w-1/2 lg:w-1/3">
                     <input type="text" id="searchInput" onkeyup="filterTable()" 
                            placeholder="Search by student initials or student number..." 
@@ -32,9 +28,6 @@
                         <th class="px-6 py-4 text-left">Year Level</th>
                         <th class="px-6 py-4 text-left">Enrollment Status</th>
                         <th class="px-6 py-4 text-left">School Year</th>
-                        <th class="px-6 py-4 text-left">Violation</th>
-                        <th class="px-6 py-4 text-left">Action Taken</th>
-                        <th class="px-6 py-4 text-left">Sanction</th>
                         <th class="px-6 py-4 text-left">Action</th>
                     </tr>
                 </thead>
@@ -47,9 +40,6 @@
                             <td class="px-6 py-4">{{ $record->student->year_level }}</td>
                             <td class="px-6 py-4">{{ $record->student->school_year }}</td>
                             <td class="px-6 py-4">{{ $record->student->enrollment_status }}</td>
-                            <td class="px-6 py-4">{{ $record->violation }}</td>
-                            <td class="px-6 py-4">{{ $record->action_taken }}</td>
-                            <td class="px-6 py-4">{{ $record->sanction }}</td>
                             <td class="px-6 py-4">
                                 <div class="flex space-x-2">
                                     <a href="{{ route('derogatory_records.show', $record->student->student_id_number) }}" 

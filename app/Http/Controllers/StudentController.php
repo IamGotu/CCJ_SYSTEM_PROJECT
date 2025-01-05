@@ -86,10 +86,6 @@ class StudentController extends Controller
             'father_contact' => 'nullable',
             'mother_contact' => 'nullable',
             'guardian_contact' => 'nullable',
-            'enrollment_status' => 'nullable|string|max:255',
-            'school_year' => 'nullable',
-            'year_level' => 'required',
-            'graduation_date' => 'nullable|date',
         ]);
 
         Student::create($request->all());
@@ -128,7 +124,7 @@ class StudentController extends Controller
             'guardian_contact' => 'nullable|string|max:255',
             'enrollment_status' => 'nullable|string|max:255',
             'school_year' => 'nullable|string|max:255',
-            'year_level' => 'required|string',
+            'year_level' => 'nullable|string',
             'graduation_date' => 'nullable|date',
         ]);
     

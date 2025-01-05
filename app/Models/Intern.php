@@ -14,8 +14,12 @@ class Intern extends Model
         'year_level',
         'status',
         'roster_number',
-        'documents'
+        'documents',
+        'cibat_class',
+        'batch_name',
     ];
 
-    protected $casts = [];
+    protected $casts = [
+        'documents' => 'array'
+    ];
 } 

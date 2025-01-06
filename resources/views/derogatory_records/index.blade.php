@@ -27,6 +27,7 @@
                         <th class="px-6 py-4 text-left">First Name</th>
                         <th class="px-6 py-4 text-left">Year Level</th>
                         <th class="px-6 py-4 text-left">School Year</th>
+                        <th class="px-6 py-4 text-left">Status</th>
                         <th class="px-6 py-4 text-left">Action</th>
                     </tr>
                 </thead>

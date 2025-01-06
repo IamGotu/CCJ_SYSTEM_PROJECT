@@ -63,15 +63,11 @@
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                                 YEAR LEVEL
                             </th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                                BATCH NAME/YEAR
-                            </th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                                CIBAT CLASS
-                            </th>
+                           
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                                 ROSTER NUMBER
                             </th>
+                            
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                                 DOCUMENTS
                             </th>
@@ -102,12 +98,7 @@
                                     <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-200">
                                         {{ $intern->year_level ?? 'N/A' }}
                                     </td>
-                                    <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-200">
-                                        {{ $intern->batch_name ?? 'Not Set' }}
-                                    </td>
-                                    <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-200">
-                                        {{ $intern->cibat_class ?? 'Not Set' }}
-                                    </td>
+                                    
                                     <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-200">
                                         {{ $intern->roster_number ?? 'Not Assigned' }}
                                     </td>

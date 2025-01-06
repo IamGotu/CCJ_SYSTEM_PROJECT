@@ -38,32 +38,7 @@
                             <p class="text-lg font-semibold text-white">{{ $intern->year_level }}</p>
                         </div>
 
-                        <!-- Batch & CIBAT Info -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label for="batch_name" class="block text-sm font-medium text-gray-400 mb-1">
-                                    Batch Name/Year
-                                </label>
-                                <input type="text"
-                                       id="batch_name"
-                                       name="batch_name"
-                                       value="{{ old('batch_name', $intern->batch_name ?? '') }}"
-                                       placeholder="e.g., Batch 2023-A"
-                                       class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-all">
-                            </div>
-
-                            <div>
-                                <label for="cibat_class" class="block text-sm font-medium text-gray-400 mb-1">
-                                    CIBAT Class
-                                </label>
-                                <input type="text"
-                                       id="cibat_class"
-                                       name="cibat_class"
-                                       value="{{ old('cibat_class', $intern->cibat_class ?? '') }}"
-                                       placeholder="e.g., Class A"
-                                       class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-all">
-                            </div>
-                        </div>
+                        
 
                         <!-- Roster Number -->
                         <div>

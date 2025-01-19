@@ -35,7 +35,12 @@
                             <p><strong class="text-blue-600 dark:text-blue-400">Violation:</strong> {{ $record->violation->violation_name }}</p>
                             <p><strong class="text-blue-600 dark:text-blue-400">Action Taken:</strong> {{ $record->action_taken }}</p>
                             <p><strong class="text-blue-600 dark:text-blue-400">Penalty:</strong> {{ $record->penalty ?? 'N/A' }}</p>
-                            <p><strong class="text-blue-600 dark:text-blue-400">Settled:</strong> {{ $record->settled ? 'Yes' : 'No' }}</p>                     
+                            <p><strong class="text-blue-600 dark:text-blue-400">Settled:</strong> {{ $record->settled ? 'Yes' : 'No' }}</p>
+                            
+                            <!-- Show "Approved by" if it exists -->
+                            @if($record->approved_by)
+                                <p><strong class="text-blue-600 dark:text-blue-400">Approved by:</strong> {{ $record->approved_by }}</p>
+                            @endif
                         </div>
                         <div>
                             <button 
@@ -44,12 +49,13 @@
                                 Edit
                             </button>
                         </div>
-                    </div>                             
+                    </div>
                 </li>
             @endforeach
-        </ul>                        
+        </ul>
     @endif
 </section>
+
 
 <!-- Edit Modal -->
 <div id="editModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-75">
@@ -80,10 +86,16 @@
             <!-- Settled -->
             <div class="mb-4">
                 <label for="settled" class="block text-gray-700 dark:text-gray-300">{{ __('Settled:') }}</label>
-                <select id="settled" name="settled" class="w-full p-2 border rounded">
+                <select id="settled" name="settled" class="w-full p-2 border rounded" onchange="toggleApprovedBy()">
                     <option value="1">{{ __('Yes') }}</option>
                     <option value="0">{{ __('No') }}</option>
                 </select>
+            </div>
+
+            <!-- Approved by (Hidden by default) -->
+            <div id="approvedByDiv" class="mb-4 hidden">
+                <label for="approved_by" class="block text-gray-700 dark:text-gray-300">{{ __('Approved by:') }}</label>
+                <input type="text" id="approved_by" name="approved_by" class="w-full p-2 border rounded">
             </div>
 
             <!-- Buttons -->
@@ -100,7 +112,7 @@
                             <button type="button" 
                                     onclick="openViewModal({{ json_encode($complaints) }})"
                                     class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">
-                                View ({{ count($complaints) }})
+                                View Complaints ({{ count($complaints) }})
                             </button>
                         </div>
                         <div id="complaintModal"  style="display:none;" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-75">
@@ -125,7 +137,6 @@
         </div>
     </div>
 </div>
-
                 <section class="mt-8">
                     <a href="{{ route('complaints.create', ['student_id_number' => $student->student_id_number]) }}" class="w-full py-3 px-4 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700 transition">
                         Add a New Complaint
@@ -143,42 +154,62 @@
         @method('PUT') 
     @endif
 
-    <!-- Violation Select -->
-<!-- Radio Buttons to Choose Violation Type -->
+    <div class="flex items-center">
+        <input type="radio" id="custom" name="violation_type" value="custom" onclick="showCustomViolationModal()">
+        <label for="custom" class="ml-2">Custom</label>
+    </div>
+
+<!-- Trigger Button -->
 <div class="form-group">
-    <label class="block text-sm font-medium text-gray-800 dark:text-gray-300">Violation Type</label>
-    <div class="flex items-center">
-        <input type="radio" id="major" name="violation_type" value="Major" onclick="toggleViolationType('Major')" required>
-        <label for="major" class="ml-2">Major</label>
+    <label for="violation" class="block text-sm font-medium text-gray-800 dark:text-gray-300">Violation</label>
+    <button type="button" id="openViolationModal" class="bg-blue-500 text-white px-4 py-2 rounded">
+        Select Violation
+    </button>
+    <input type="hidden" id="violation_id" name="violation_id" value="default_violation_id">
+</div>
+
+<!-- Modal -->
+<div id="violationModal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-3/4 md:w-1/2 max-w-3xl">
+        <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-6">Select Violation</h2>
+
+        <div class="overflow-y-auto max-h-80">
+            <!-- Major Violations -->
+            <div class="mb-6">
+                <h3 class="font-semibold text-gray-800 dark:text-gray-300 mb-4 text-lg">Major Violations</h3>
+                @foreach ($violations->where('violation_type', 'major') as $violation)
+                    <div class="flex items-center space-x-3 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 rounded cursor-pointer">
+                        <button type="button" class="selectViolation w-full text-left bg-gray-100 dark:bg-gray-600 px-4 py-2 rounded transition-colors duration-200"
+                                data-id="{{ $violation->id }}" 
+                                data-name="{{ $violation->violation_name }}">
+                            {{ $violation->violation_name }}
+                        </button>
+                    </div>
+                @endforeach
+            </div>
+
+            <!-- Minor Violations -->
+            <div>
+                <h3 class="font-semibold text-gray-800 dark:text-gray-300 mb-4 text-lg">Minor Violations</h3>
+                @foreach ($violations->where('violation_type', 'minor') as $violation)
+                    <div class="flex items-center space-x-3 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 rounded cursor-pointer">
+                        <button type="button" class="selectViolation w-full text-left bg-gray-100 dark:bg-gray-600 px-4 py-2 rounded transition-colors duration-200"
+                                data-id="{{ $violation->id }}" 
+                                data-name="{{ $violation->violation_name }}">
+                            {{ $violation->violation_name }}
+                        </button>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+
+        <div class="flex justify-end mt-6">
+            <button id="closeViolationModal" type="button" class="bg-red-500 text-white hover:bg-red-600 px-6 py-2 rounded focus:outline-none focus:ring-2 focus:ring-red-400 transition duration-200">
+                Close
+            </button>
+        </div>
     </div>
-    <div class="flex items-center">
-        <input type="radio" id="minor" name="violation_type" value="Minor" onclick="toggleViolationType('Minor')" required>
-        <label for="minor" class="ml-2">Minor</label>
-    </div>
 </div>
-
-<!-- Dropdown for Major Violations -->
-<div class="form-group" id="major_violation_dropdown" style="display: none;">
-    <label for="major_violation" class="block text-sm font-medium text-gray-800 dark:text-gray-300">Major Violation</label>
-    <select id="major_violation" name="violation_id">
-        <option value="">-- Select Major Violation --</option>
-        @foreach ($violations->where('violation_type', 'major') as $violation)
-            <option value="{{ $violation->id }}">{{ $violation->violation_name }}</option>
-        @endforeach
-    </select>
-</div>
-
-<!-- Dropdown for Minor Violations -->
-<div class="form-group" id="minor_violation_dropdown" style="display: none;">
-    <label for="minor_violation" class="block text-sm font-medium text-gray-800 dark:text-gray-300">Minor Violation</label>
-    <select id="minor_violation" name="violation_id">
-        <option value="">-- Select Minor Violation --</option>
-        @foreach ($violations->where('violation_type', 'minor') as $violation)
-            <option value="{{ $violation->id }}">{{ $violation->violation_name }}</option>
-        @endforeach
-    </select>
-</div>
-
 
     <!-- Action Taken Input -->
     <div>
@@ -214,6 +245,36 @@
         <button type="submit" class="w-full py-3 px-4 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition">Save Record</button>
     </div>
 </form>
+<!-- Modal for Custom Violation -->
+<div id="customViolationModal" class="modal hidden fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center">
+    <div class="modal-content bg-white p-6 rounded-lg shadow-lg w-1/3">
+        <h3 class="text-xl font-bold mb-4">Add Custom Violation</h3>
+        
+        <!-- Form for Custom Violation -->
+        <form action="{{ route('violations.store') }}" method="POST">
+            @csrf
+            <div class="form-group mb-4">
+                <label for="custom_violation_name" class="block text-sm font-medium text-gray-800">Violation Name</label>
+                <input type="text" name="violation_name" id="custom_violation_name" class="form-input mt-1 w-full" required>
+            </div>
+            <div class="form-group mb-4">
+                <label for="custom_violation_type" class="block text-sm font-medium text-gray-800">Violation Type</label>
+                <select name="violation_type" id="custom_violation_type" class="form-select mt-1 w-full" required>
+                    <option value="major">Major</option>
+                    <option value="minor">Minor</option>
+                </select>
+            </div>
+            <div class="form-group mb-4">
+                <label for="grounds" class="block text-sm font-medium text-gray-800">Grounds</label>
+                <textarea name="grounds" id="grounds" class="form-input mt-1 w-full" rows="3" placeholder="Explain the grounds for this violation"></textarea>
+            </div>
+            <div class="form-group flex justify-end">
+                <button type="button" class="bg-gray-400 text-white py-2 px-4 rounded" onclick="closeCustomViolationModal()">Cancel</button>
+                <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded ml-2">Save Violation</button>
+            </div>
+        </form>
+    </div>
+</div>
 <!-- Modal for Viewing Complaint Details -->
 
 <script src="{{ asset('js/records.js') }}" defer></script>

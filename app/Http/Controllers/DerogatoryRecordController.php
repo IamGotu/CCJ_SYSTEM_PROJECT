@@ -30,13 +30,18 @@ class DerogatoryRecordController extends Controller
         return view('derogatory_records.show', compact('student', 'records', 'complaints', 'violations', 'historyRecords'));
     }
 
-    // List all derogatory records
-    public function index()
-    {
-        $derogatoryRecords = DerogatoryRecord::with('student')->get();
-        return view('derogatory_records.index', compact('derogatoryRecords'));
+// List all derogatory records
+public function index()
+{
+    // Fetch students along with their derogatory record histories and complaints
+    $studentsWithRecords = Student::with(['derogatoryRecordHistories', 'complaints'])->get();
+
+    foreach ($studentsWithRecords as $student) {
+        logger()->info("Student ID: {$student->student_id_number}, Derogatory Record Histories: {$student->derogatoryRecordHistories->count()}, Complaints: {$student->complaints->count()}");
     }
 
+    return view('derogatory_records.index', compact('studentsWithRecords'));
+}
     // Show the form to create a new derogatory record
     public function create()
     {
@@ -60,17 +65,24 @@ class DerogatoryRecordController extends Controller
 // Update the specified derogatory record
 public function update(Request $request, $id)
 {
-
     \Log::debug('Update request data:', $request->all());
+
     // Validate incoming request
     $request->validate([
         'violation_id' => 'required|exists:violations,id',
         'action_taken' => 'required|string|max:255',
         'settled' => 'required|boolean',
         'student_id_number' => 'required|exists:students,student_id_number',
+        'approved_by' => 'nullable|string|max:255', // Added validation for approved_by
     ]);
+     // Ensure violation_id is not null or default before proceeding
+     $violationId = $request->input('violation_id');
+     if (empty($violationId) || $violationId === 'default_violation_id') {
+         // Handle the case where violation_id is invalid
+         return redirect()->back()->with('error', 'Please select a valid violation.');
+     }
 
-    // Fetch the violation
+    // Fetch the violation and record
     $violation = Violation::findOrFail($request->input('violation_id'));
     $record = DerogatoryRecord::findOrFail($id);
 
@@ -90,6 +102,12 @@ public function update(Request $request, $id)
         'settled' => (bool)$request->input('settled'),
     ]);
 
+    // Check if 'settled' is Yes and there's an 'approved_by' value
+    $approvedBy = null;
+    if ((bool)$request->input('settled') && $request->has('approved_by')) {
+        $approvedBy = $request->input('approved_by');
+    }
+
     // Check for existing history record before creating a new one
     $existingHistory = DerogatoryRecordHistory::where([
         ['student_id_number', '=', $request->input('student_id_number')],
@@ -102,6 +120,7 @@ public function update(Request $request, $id)
             'penalty' => $penalty,
             'action_taken' => $request->input('action_taken'),
             'settled' => (bool)$request->input('settled'),
+            'approved_by' => $approvedBy, // Update the approved_by field
             'updated_at' => now(),
         ]);
     } else {
@@ -112,14 +131,16 @@ public function update(Request $request, $id)
             'penalty' => $penalty,
             'action_taken' => $request->input('action_taken'),
             'settled' => (bool)$request->input('settled'),
+            'approved_by' => $approvedBy, // Add the approved_by field
             'created_at' => now(),
             'updated_at' => now(),
         ]);
     }
+
     return redirect()->route('derogatory_records.show', ['student_id' => $record->student->student_id_number])
                      ->with('success', 'Record updated successfully.');
-                     
 }
+
 
 // Handle deleting a derogatory record
 public function destroy($id)

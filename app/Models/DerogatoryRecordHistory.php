@@ -15,6 +15,7 @@ class DerogatoryRecordHistory extends Model
         'penalty',
         'action_taken',
         'settled',
+        'approved_by',
     ];
 
     // Define relationship with Student

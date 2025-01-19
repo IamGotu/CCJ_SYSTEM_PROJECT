@@ -30,6 +30,8 @@ function closeViewModal() {
 }
 
 
+// Open the modal and populate form fields
+// Open the modal and populate form fields
 function openModal(recordId) {
     const record = records[recordId];
     
@@ -43,28 +45,122 @@ function openModal(recordId) {
     document.getElementById('penalty').value = record.penalty ?? '';
     document.getElementById('settled').value = record.settled ? '1' : '0';
     
+    // Display "Approved by" if it exists in the record
+    const approvedByField = document.getElementById('approved_by');
+    if (record.approved_by) {
+        approvedByField.value = record.approved_by;
+    } else {
+        approvedByField.value = '';  // Reset if no data
+    }
+
     // Show the modal
     document.getElementById('editModal').classList.remove('hidden');
+    
+    // Toggle the visibility of the "Approved by" field based on "Settled"
+    toggleApprovedBy();
 }
 
+// Close the modal
 function closeModal() {
-    // Hide the modal
     document.getElementById('editModal').classList.add('hidden');
 }
-document.addEventListener('DOMContentLoaded', function () {
-    const complainantType = document.getElementById('complainant_type');
-    const studentIdContainer = document.getElementById('complainant_student_id_container');
 
-    complainantType.addEventListener('change', function () {
-        if (complainantType.value === 'student') {
-            studentIdContainer.style.display = 'block';
-        } else {
-            studentIdContainer.style.display = 'none';
-        }
-    });
-});
-function toggleViolationType(type) {
-    document.getElementById('major_violation_dropdown').style.display = type === 'Major' ? 'block' : 'none';
-    document.getElementById('minor_violation_dropdown').style.display = type === 'Minor' ? 'block' : 'none';
+// Function to toggle the visibility of the "Approved by" field
+function toggleApprovedBy() {
+    const settled = document.getElementById('settled').value;
+    const approvedByDiv = document.getElementById('approvedByDiv');
+    const approvedByField = document.getElementById('approved_by');
+
+    // Show the "Approved by" field if "Settled" is "Yes"
+    if (settled === '1') {
+        approvedByDiv.classList.remove('hidden');
+    } else {
+        approvedByDiv.classList.add('hidden');
+        approvedByField.value = '';  // Clear the "Approved by" field if "Settled" is "No"
+    }
 }
+
+// Function to toggle the visibility of the "Approved by" field
+function toggleApprovedBy() {
+    const settled = document.getElementById('settled').value;
+    const approvedByDiv = document.getElementById('approvedByDiv');
+
+    // Show the "Approved by" field if "Settled" is "Yes"
+    if (settled === '1') {
+        approvedByDiv.classList.remove('hidden');
+    } else {
+        approvedByDiv.classList.add('hidden');
+    }
+}
+
+
+function showCustomViolationModal() {
+    // Show the custom violation modal when the "Custom" radio button is selected
+    document.getElementById('customViolationModal').classList.remove('hidden');
+}
+
+function closeCustomViolationModal() {
+    // Close the custom violation modal
+    document.getElementById('customViolationModal').classList.add('hidden');
+}
+function toggleViolationType(type) {
+    console.log('Violation Type Selected:', type);  // Debugging line
+    // Show/hide dropdowns based on violation type selection
+    if (type === 'Major') {
+        document.getElementById('major_violation_dropdown').style.display = 'block';
+        document.getElementById('minor_violation_dropdown').style.display = 'none';
+    } else if (type === 'Minor') {
+        document.getElementById('minor_violation_dropdown').style.display = 'block';
+        document.getElementById('major_violation_dropdown').style.display = 'none';
+    } else {
+        document.getElementById('major_violation_dropdown').style.display = 'none';
+        document.getElementById('minor_violation_dropdown').style.display = 'none';
+    }
+}
+document.addEventListener('DOMContentLoaded', () => {
+    const openModal = document.getElementById('openViolationModal');
+    const closeModal = document.getElementById('closeViolationModal');
+    const modal = document.getElementById('violationModal');
+    const violationInput = document.getElementById('violation_id');
+    const violationButton = document.getElementById('openViolationModal');
+
+    // Open the modal
+    openModal.addEventListener('click', () => {
+        modal.classList.remove('hidden');
+    });
+
+    // Close the modal
+    closeModal.addEventListener('click', () => {
+        // Ensure the violation_id remains unset when closing the modal without selection
+        if (violationInput.value === 'default_violation_id') {
+            violationInput.value = ''; // Reset the hidden input value
+            violationButton.textContent = 'Select Violation'; // Reset the button text
+        }
+        modal.classList.add('hidden');
+    });
+
+    // Handle violation selection
+    document.querySelectorAll('.selectViolation').forEach(button => {
+        button.addEventListener('click', () => {
+            const id = button.getAttribute('data-id');
+            const name = button.getAttribute('data-name');
+            violationInput.value = id; // Set the hidden input value correctly
+            violationButton.textContent = name; // Update button text for user feedback
+            modal.classList.add('hidden'); // Close the modal
+        });
+    });
+
+    // Add validation to prevent form submission if violation_id is null
+    const form = document.querySelector('form'); // Assuming you're submitting the form
+
+    if (form) {
+        form.addEventListener('submit', (e) => {
+            if (!violationInput.value || violationInput.value === 'default_violation_id') {
+                e.preventDefault(); // Prevent form submission if violation_id is not set or is default
+                alert('Please select a violation before submitting the form.');
+            }
+        });
+    }
+});
+
 

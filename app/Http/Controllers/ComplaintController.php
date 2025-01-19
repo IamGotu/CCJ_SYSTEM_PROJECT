@@ -19,10 +19,25 @@ class ComplaintController extends Controller
     public function update(Request $request, $id)
     {
         $complaint = Complaint::findOrFail($id);
-        $complaint->update($request->all());
+    
+        // Handle file upload for evidence files if necessary
+        if ($request->hasFile('evidence_files')) {
+            $paths = [];
+            foreach ($request->file('evidence_files') as $file) {
+                $path = $file->store('evidence_files'); 
+                // Store paths in an array or as needed
+                $paths[] = $path;
+            }
+            // Store paths as JSON if your database column is set up for it
+            $complaint->evidence_files = json_encode($paths); 
+        }
+    
+        // Update other complaint fields, excluding 'evidence_files' from mass assignment
+        $complaint->update($request->except('evidence_files'));
     
         return redirect()->route('complaints.showOrEdit', ['id' => $id])->with('success', 'Complaint updated successfully.');
     }
+    
 // Edit a specific complaint
 public function edit($id)
 {

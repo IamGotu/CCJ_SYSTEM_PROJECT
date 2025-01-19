@@ -10,6 +10,7 @@ use App\Http\Controllers\DerogatoryRecordController;
 use App\Http\Controllers\DerogatoryRecordHistoryController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\ViolationController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -97,7 +98,8 @@ Route::delete('/derogatory_records/{id}', [DerogatoryRecordController::class, 'd
 
 Route::get('/complaints/create/{student_id_number}', [ComplaintController::class, 'create'])->name('complaints.create');
 Route::post('complaints', [ComplaintController::class, 'store'])->name('complaints.store');
-
+Route::get('/violations', [ViolationController::class, 'index'])->name('violations.index'); // Optional, if you want to list violations
+Route::post('/violations/store', [ViolationController::class, 'store'])->name('violations.store'); // Store new custom violation
 
 Route::get('/evidence-files/{filename}', [FileController::class, 'showEvidenceFile'])->name('evidence.file');
 

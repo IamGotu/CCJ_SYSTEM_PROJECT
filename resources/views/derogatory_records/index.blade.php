@@ -19,51 +19,56 @@
 
         <!-- Records Table -->
         <div class="overflow-x-auto mt-6 px-4 sm:px-6 lg:px-5 w-full sm:w-auto">
-            <table class="min-w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600">
-                <thead class="bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-300 text-xs font-medium uppercase tracking-wider">
-                    <tr>
-                        <th class="px-6 py-4 text-left">Student Number</th>
-                        <th class="px-6 py-4 text-left">Last Name</th>
-                        <th class="px-6 py-4 text-left">First Name</th>
-                        <th class="px-6 py-4 text-left">Year Level</th>
-                        <th class="px-6 py-4 text-left">School Year</th>
-                        <th class="px-6 py-4 text-left">Action</th>
-                    </tr>
-                </thead>
-                <tbody id="recordsTableBody" class="text-gray-600 dark:text-gray-400 text-sm">
-                    @forelse ($derogatoryRecords as $record)
-                        <tr class="border-b border-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-200">
-                            <td class="px-6 py-4">{{ $record->student->student_id_number }}</td>
-                            <td class="px-6 py-4">{{ $record->student->last_name }}</td>
-                            <td class="px-6 py-4">{{ $record->student->first_name }}</td>
-                            <td class="px-6 py-4">{{ $record->student->year_level }}</td>
-                            <td class="px-6 py-4">{{ $record->student->school_year }}</td>
-                            <td class="px-6 py-4">{{ $record->student->enrollment_status }}</td>
-                            <td class="px-6 py-4">
-                                <div class="flex space-x-2">
-                                    <a href="{{ route('derogatory_records.show', $record->student->student_id_number) }}" 
-                                       class="text-blue-600 hover:text-blue-800">Add Record for this student</a>
-                                    <form action="{{ route('derogatory_records.destroy', $record->id) }}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" 
-                                                class="text-red-600 hover:text-red-800"
-                                                onclick="return confirm('Are you sure?')">Delete</button>
-                                    </form>
-                                </div>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="8" class="px-6 py-4 text-center text-gray-500 dark:text-gray-300">
-                                No records found
-                            </td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
-    </div>
+    <table class="min-w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600">
+        <thead class="bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-300 text-xs font-medium uppercase tracking-wider">
+            <tr>
+                <th class="px-6 py-4 text-left">Student Number</th>
+                <th class="px-6 py-4 text-left">Last Name</th>
+                <th class="px-6 py-4 text-left">First Name</th>
+                <th class="px-6 py-4 text-left">Year Level</th>
+                <th class="px-6 py-4 text-left">School Year</th>
+                <th class="px-6 py-4 text-left">Status</th>
+                <th class="px-6 py-4 text-left">Records Status</th>
+                <th class="px-6 py-4 text-left">Action</th>
+            </tr>
+        </thead>
+        <tbody id="recordsTableBody" class="text-gray-600 dark:text-gray-400 text-sm">
+            @foreach ($studentsWithRecords as $student)
+                <tr class="border-b border-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-200">
+                    <td class="px-6 py-4">{{ $student->student_id_number }}</td>
+                    <td class="px-6 py-4">{{ $student->last_name }}</td>
+                    <td class="px-6 py-4">{{ $student->first_name }}</td>
+                    <td class="px-6 py-4">{{ $student->year_level }}</td>
+                    <td class="px-6 py-4">{{ $student->school_year }}</td>
+                    <td class="px-6 py-4">{{ $student->enrollment_status }}</td>
+                    <td class="px-6 py-4">
+                @if ($student->derogatoryRecordHistories->isNotEmpty())
+                    <span class="text-red-600">Has Records/Complaints</span>
+                @else
+                    <span class="text-green-600">No Records</span>
+                @endif
+            </td>
+                    <td class="px-6 py-4">
+                        <div class="flex space-x-2">
+                            <a href="{{ route('derogatory_records.show', $student->student_id_number) }}" 
+                               class="text-blue-600 hover:text-blue-800">Add Record</a>
+                            @if ($student->derogatoryRecords->count() > 0)
+                                <form action="{{ route('derogatory_records.destroy', $student->derogatoryRecords->first()->id) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" 
+                                            class="text-red-600 hover:text-red-800"
+                                            onclick="return confirm('Are you sure?')">Delete</button>
+                                </form>
+                            @endif
+                        </div>
+                    </td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
+
 
     <script>
         function filterTable() {

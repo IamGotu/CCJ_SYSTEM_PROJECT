@@ -94,8 +94,7 @@
     <label for="complainant_type" class="block text-gray-700">Complainant Type</label>
     <select id="complainant_type" name="complainant_type" class="w-full border-gray-300 rounded" required>
         <option value="student" {{ $complaint->complainant_type == 'student' ? 'selected' : '' }}>Student</option>
-        <option value="faculty" {{ $complaint->complainant_type == 'faculty' ? 'selected' : '' }}>Faculty</option>
-        <option value="staff" {{ $complaint->complainant_type == 'staff' ? 'selected' : '' }}>Staff</option>
+        <option value="faculty" {{ $complaint->complainant_type == 'civilian' ? 'selected' : '' }}>Civilian</option>
     </select>
 </div>
 
